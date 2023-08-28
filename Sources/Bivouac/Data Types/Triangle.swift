@@ -13,11 +13,11 @@ extension Grid {
         
         public var isPointy: Bool { coordinate.equalToZero }
         
-        private var delta: Int { isPointy ? -1 : 1 }
+        public var delta: Int { isPointy ? -1 : 1 }
         
         public let coordinate: Coordinate
         
-        public init(coordinate: Coordinate) {
+        public init(_ coordinate: Coordinate) {
             
             self.coordinate = coordinate
         }
@@ -36,9 +36,17 @@ extension Grid.Triangle {
     public func corner(corner: Corner) -> Coordinate {
         
         switch corner {
-        case .c0: return Coordinate(delta + coordinate.x, coordinate.y, coordinate.z)
-        case .c1: return Coordinate(coordinate.x, coordinate.y, delta + coordinate.z)
-        case .c2: return Coordinate(coordinate.x, delta + coordinate.y, coordinate.z)
+        case .c0: return Coordinate(delta + coordinate.x,
+                                    coordinate.y,
+                                    coordinate.z)
+            
+        case .c1: return Coordinate(coordinate.x,
+                                    coordinate.y,
+                                    delta + coordinate.z)
+            
+        case .c2: return Coordinate(coordinate.x,
+                                    delta + coordinate.y,
+                                    coordinate.z)
         }
     }
     
@@ -192,7 +200,7 @@ extension Grid.Triangle {
                                         pointy ? t : -t,
                                         pointy ? u : s)
                 
-                triangles.append(.init(coordinate: coordinate + offset))
+                triangles.append(.init(coordinate + offset))
             }
         }
         

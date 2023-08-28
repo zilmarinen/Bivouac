@@ -15,7 +15,7 @@ public enum Grid {
         case region = 28
     }
     
-    public enum Axis {
+    public enum Axis: CaseIterable {
         
         case x, y, z
     }
