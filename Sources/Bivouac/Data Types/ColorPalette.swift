@@ -15,12 +15,12 @@ public struct ColorPalette {
     
     public init(primary: Color,
                 secondary: Color,
-                tertiary: Color,
-                quaternary: Color) {
+                tertiary: Color? = nil,
+                quaternary: Color? = nil) {
         
         self.primary = primary
         self.secondary = secondary
-        self.tertiary = tertiary
-        self.quaternary = quaternary
+        self.tertiary = tertiary ?? primary
+        self.quaternary = quaternary ?? secondary
     }
 }
