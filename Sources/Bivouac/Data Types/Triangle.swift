@@ -360,3 +360,82 @@ extension Grid.Triangle {
     }
 }
 
+extension Grid.Triangle {
+    
+    var perimeter: [Coordinate] { adjacent + diagonals + touching }
+    
+    //
+    //  Directly connected adjacent triangles that share an edge.
+    //
+    //                  :-------:
+    //
+    //              :-------:-------:
+    //                  z   o   y
+    //          :-------:-------:-------:
+    //                      x
+    //              :-------:-------:
+    //
+ 
+    public var adjacent: [Coordinate] { corners }
+    
+    public func adjacent(along axis: Grid.Axis) -> Coordinate {
+        
+        switch axis {
+            
+        case .x: return corner(corner: .c0)
+        case .y: return corner(corner: .c1)
+        case .z: return corner(corner: .c2)
+        }
+    }
+    
+    //
+    //  Indirectly connected diagonal triangles that are touching a corner.
+    //
+    //                  :-------:
+    //                      x
+    //              :-------:-------:
+    //                      o
+    //          :-------:-------:-------:
+    //              y               z
+    //              :-------:-------:
+    //
+    
+    public var diagonals: [Coordinate] { Grid.Axis.allCases.map { diagonal(along: $0) } }
+    
+    public func diagonal(along axis: Grid.Axis) -> Coordinate {
+        
+        switch axis {
+            
+        case .x: return .init(-delta + coordinate.x, delta + coordinate.y, delta + coordinate.z)
+        case .y: return .init(delta + coordinate.x, -delta + coordinate.y, delta + coordinate.z)
+        case .z: return .init(delta + coordinate.x, delta + coordinate.y, -delta + coordinate.z)
+        }
+    }
+    
+    //
+    //  Indirectly connected triangles that are touching a corner.
+    //
+    //                  :-------:
+    //                  z       y
+    //              :-------:-------:
+    //              z       o       y
+    //          :-------:-------:-------:
+    //                  x       x
+    //              :-------:-------:
+    //
+    
+    public var touching: [Coordinate] { Grid.Axis.allCases.flatMap { touching(along: $0) } }
+    
+    public func touching(along axis: Grid.Axis) -> [Coordinate] {
+        
+        switch axis {
+            
+        case .x: return [.init(coordinate.x, delta + coordinate.y, -delta + coordinate.z),
+                         .init(coordinate.x, -delta + coordinate.y, delta + coordinate.z)]
+        case .y: return [.init(delta + coordinate.x, coordinate.y, -delta + coordinate.z),
+                         .init(-delta + coordinate.x, coordinate.y, delta + coordinate.z)]
+        case .z: return [.init(delta + coordinate.x, -delta + coordinate.y, coordinate.z),
+                         .init(-delta + coordinate.x, delta + coordinate.y, coordinate.z)]
+        }
+    }
+}
