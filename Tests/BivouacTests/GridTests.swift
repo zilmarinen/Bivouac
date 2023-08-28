@@ -9,7 +9,7 @@ import XCTest
 
 final class BivouacTests: XCTestCase {
     
-    let triangle = Grid.Triangle(coordinate: .zero)
+    let triangle = Grid.Triangle(.zero)
     
     func testUnitTriangleIsPointy() throws {
         
@@ -36,5 +36,56 @@ final class BivouacTests: XCTestCase {
         XCTAssertEqual(tileSieve.coordinates.count, 3)
         XCTAssertEqual(chunkSieve.coordinates.count, 36)
         XCTAssertEqual(regionSieve.coordinates.count, 435)
+    }
+    
+    func testAdjacent() throws {
+        
+        let adjacent = triangle.adjacent
+        
+        let coordinates = [Coordinate(triangle.delta, 0, 0),
+                           Coordinate(0, triangle.delta, 0),
+                           Coordinate(0, 0, triangle.delta)]
+        
+        XCTAssertEqual(adjacent.count, coordinates.count)
+        
+        for coordinate in coordinates {
+            
+            XCTAssert(adjacent.contains(coordinate))
+        }
+    }
+    
+    func testDiagonal() throws {
+        
+        let diagonals = triangle.diagonals
+        
+        let coordinates = [Coordinate(-triangle.delta, triangle.delta, triangle.delta),
+                           Coordinate(triangle.delta, -triangle.delta, triangle.delta),
+                           Coordinate(triangle.delta, triangle.delta, -triangle.delta)]
+        
+        XCTAssertEqual(diagonals.count, coordinates.count)
+        
+        for coordinate in coordinates {
+            
+            XCTAssert(diagonals.contains(coordinate))
+        }
+    }
+    
+    func testTouching() throws {
+        
+        let touching = triangle.touching
+        
+        let coordinates = [Coordinate(triangle.delta, -triangle.delta, 0),
+                           Coordinate(triangle.delta, 0, -triangle.delta),
+                           Coordinate(0, triangle.delta, -triangle.delta),
+                           Coordinate(-triangle.delta, triangle.delta, 0),
+                           Coordinate(-triangle.delta, 0, triangle.delta),
+                           Coordinate(0, -triangle.delta, triangle.delta)]
+        
+        XCTAssertEqual(touching.count, coordinates.count)
+        
+        for coordinate in coordinates {
+            
+            XCTAssert(touching.contains(coordinate))
+        }
     }
 }
