@@ -7,6 +7,11 @@
 import Euclid
 import Foundation
 
+extension Array where Element == Coordinate {
+    
+    public func rotate(toward axis: Grid.Axis) -> Self { map { $0.rotate(around: axis) } }
+}
+
 extension Array where Element == Polygon {
     
     public enum MeshError: Error {

@@ -31,29 +31,29 @@ public struct Coordinate: Codable,
     }
 }
 
-public extension Coordinate {
+extension Coordinate {
     
-    static let zero = Coordinate(0, 0, 0)
-    static let one = Coordinate(1, 1, 1)
-    static let unitX = Coordinate(1, 0, 0)
-    static let unitY = Coordinate(0, 1, 0)
-    static let unitZ = Coordinate(0, 0, 1)
+    public static let zero = Coordinate(0, 0, 0)
+    public static let one = Coordinate(1, 1, 1)
+    public static let unitX = Coordinate(1, 0, 0)
+    public static let unitY = Coordinate(0, 1, 0)
+    public static let unitZ = Coordinate(0, 0, 1)
     
-    static func -(lhs: Coordinate, rhs: Coordinate) -> Coordinate { Coordinate(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z) }
-    static func +(lhs: Coordinate, rhs: Coordinate) -> Coordinate { Coordinate(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z) }
+    public static func -(lhs: Coordinate, rhs: Coordinate) -> Coordinate { Coordinate(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z) }
+    public static func +(lhs: Coordinate, rhs: Coordinate) -> Coordinate { Coordinate(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z) }
 }
 
-public extension Coordinate {
+extension Coordinate {
     
-    func convert(from: Grid.Scale,
-                 to: Grid.Scale) -> Coordinate {
+    public func convert(from: Grid.Scale,
+                        to: Grid.Scale) -> Coordinate {
         
         guard from != to else { return self }
         
         return convert(to: from).convert(to: to)
     }
     
-    func convert(to scale: Grid.Scale) -> Vector {
+    public func convert(to scale: Grid.Scale) -> Vector {
         
         let dx = Double(x)
         let dy = Double(y)
@@ -63,5 +63,18 @@ public extension Coordinate {
         return Vector((0.5 * dx + -0.5 * dz) * edgeLength,
                       0,
                       (-.sqrt3 / 6.0 * dx + .sqrt3 / 3 * dy - .sqrt3 / 6.0 * dz) * edgeLength)
+    }
+}
+
+extension Coordinate {
+    
+    public func rotate(around axis: Grid.Axis) -> Self {
+        
+        switch axis {
+            
+        case .x: return self
+        case .y: return Coordinate(z, x, y)
+        case .z: return Coordinate(z, y, x)
+        }
     }
 }
