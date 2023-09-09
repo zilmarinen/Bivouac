@@ -9,48 +9,50 @@ import Foundation
 
 extension Grid {
     
-    public struct Triangle {
+    public struct Triangle: Equatable {
         
-        public var isPointy: Bool { coordinate.equalToZero }
+        public var isPointy: Bool { position.equalToZero }
         
         public var delta: Int { isPointy ? -1 : 1 }
         
-        public let coordinate: Coordinate
+        public let position: Coordinate
         
-        public init(_ coordinate: Coordinate) {
+        public init(_ position: Coordinate) {
             
-            self.coordinate = coordinate
+            self.position = position
         }
     }
 }
 
 extension Grid.Triangle {
     
-    public enum Corner: CaseIterable {
+    public enum Vertex: CaseIterable {
         
-        case c0, c1, c2
-    }
-    
-    public var corners: [Coordinate] { Corner.allCases.map { corner(corner: $0) } }
+        public static var allCases: [Grid.Triangle.Vertex] = [.v2, .v1, .v0]
         
-    public func corner(corner: Corner) -> Coordinate {
+        case v0, v1, v2
         
-        switch corner {
-        case .c0: return Coordinate(delta + coordinate.x,
-                                    coordinate.y,
-                                    coordinate.z)
+        internal var axis: Grid.Axis {
             
-        case .c1: return Coordinate(coordinate.x,
-                                    coordinate.y,
-                                    delta + coordinate.z)
-            
-        case .c2: return Coordinate(coordinate.x,
-                                    delta + coordinate.y,
-                                    coordinate.z)
+            switch self {
+                
+            case .v0: return .x
+            case .v1: return .y
+            case .v2: return .z
+            }
         }
     }
     
-    public func vertices(for scale: Grid.Scale) -> [Vector] { corners.map { $0.convert(to: scale) } }
+    public var vertices: [Coordinate] { Vertex.allCases.map { vertex($0) } }
+        
+    public func vertex(_ vertex: Vertex) -> Coordinate {
+        
+        let unit = (vertex.axis.coordinate * -1) + (isPointy ? .zero : .one)
+        
+        return position + (isPointy ? -unit : unit)
+    }
+    
+    public func vertices(for scale: Grid.Scale) -> [Vector] { vertices.map { $0.convert(to: scale) } }
 }
 
 extension Grid.Triangle {
@@ -123,9 +125,9 @@ extension Grid.Triangle {
     
     public func stencil(for scale: Grid.Scale) -> Stencil {
         
-        let v0 = corner(corner: .c0).convert(to: scale)
-        let v1 = corner(corner: .c1).convert(to: scale)
-        let v2 = corner(corner: .c2).convert(to: scale)
+        let v0 = vertex(.v0).convert(to: scale)
+        let v1 = vertex(.v1).convert(to: scale)
+        let v2 = vertex(.v2).convert(to: scale)
         
         let v5 = v0.lerp(v1, 0.5)
         let v7 = v0.lerp(v2, 0.5)
@@ -200,11 +202,11 @@ extension Grid.Triangle {
                                         pointy ? t : -t,
                                         pointy ? u : s)
                 
-                triangles.append(.init(coordinate + offset))
+                triangles.append(.init(position + offset))
             }
         }
         
-        return Triangulation(coordinate: coordinate,
+        return Triangulation(coordinate: position,
                              scale: scale,
                              triangles: triangles)
     }
@@ -231,7 +233,7 @@ extension Grid.Triangle {
             
         public let coordinate: Coordinate
         public let scale: Grid.Scale
-        public let coordinates: [Coordinate]
+        public let vertices: [Grid.Vertex]
     }
     
     public func sieve(for scale: Grid.Scale) -> Sieve {
@@ -239,11 +241,11 @@ extension Grid.Triangle {
         let columns = scale.rawValue + 1
         let size = Int(ceil(Double(scale.rawValue) / sqrt(.silver)))
         let half = Int(floor(Double(size) / 2.0))
-        let origin = coordinate.convert(from: scale,
-                                        to: .tile)
-        let pointy = origin.equalToZero
+        let origin = position.convert(from: scale,
+                                      to: .tile)
+        let pointy = position.equalToZero
         
-        var handles: [Coordinate] = []
+        var vertices: [Grid.Vertex] = []
 
         for column in 0..<columns {
 
@@ -260,109 +262,19 @@ extension Grid.Triangle {
                                         pointy ? t : -t - 1,
                                         pointy ? s : -s - 1)
 
-                handles.append(origin + offset)
+                vertices.append(.init(origin + offset))
             }
         }
         
-        return Sieve(coordinate: coordinate,
+        return Sieve(coordinate: position,
                      scale: scale,
-                     coordinates: handles)
+                     vertices: vertices)
     }
 }
 
 extension Grid.Triangle {
     
-    public enum Kite: Int,
-                      CaseIterable,
-                      Identifiable {
-        
-        case delta
-        case epsilon
-        case gamma
-        case lambda
-        case omega
-        case phi
-        case psi
-        case sigma
-        
-        public var id: String {
-            
-            switch self {
-                
-            case .delta: return "Delta"
-            case .epsilon: return "Epsilon"
-            case .gamma: return "Gamma"
-            case .lambda: return "Lambda"
-            case .omega: return "Omega"
-            case .phi: return "Phi"
-            case .psi: return "Psi"
-            case .sigma: return "Sigma"
-            }
-        }
-        
-        public func vertices(for scale: Grid.Scale) -> [Stencil.Vertex] {
-            
-            switch self {
-                
-            case .delta: return [.v0, .v5, .v7]
-            case .epsilon: return [.v0, .v5, .center, .v7]
-            case .gamma: return [.v0, .v5, .v9, .v10, .v6, .v7]
-            case .lambda: return [.v0, .v5, .v6, .v9, .v10, .v7]
-            case .omega: return [.v0, .v5, .v9, .v10, .v7]
-            case .phi: return [.v0, .v5, .v9, .v6, .v7]
-            case .psi: return [.v0, .v5, .v6, .v10, .v7]
-            case .sigma: return [.v0, .v5, .v9, .v6, .v10, .v7]
-            }
-        }
-    }
-}
-
-extension Grid.Triangle {
-    
-    public enum Pattern: Int,
-                         Identifiable {
-        
-        case descartes
-        case euclid
-        case euler
-        case gauss
-        case mobius
-        case pascal
-        case thales
-        
-        public var id: String {
-            
-            switch self {
-                
-            case .descartes: return "Descartes"
-            case .euclid: return "Euclid"
-            case .euler: return "Euler"
-            case .gauss: return "Gauss"
-            case .mobius: return "Mobius"
-            case .pascal: return "Pascal"
-            case .thales: return "Thales"
-            }
-        }
-        
-        public var kites: [Kite] {
-            
-            switch self {
-                
-            case .descartes: return [.epsilon, .epsilon, .epsilon]
-            case .euclid: return [.lambda, .delta, .sigma]
-            case .euler: return [.psi, .delta, .omega]
-            case .gauss: return [.lambda, .psi, .psi]
-            case .mobius: return [.delta, .gamma, .sigma]
-            case .pascal: return [.phi, .gamma, .phi]
-            case .thales: return [.delta, .phi, .omega]
-            }
-        }
-    }
-}
-
-extension Grid.Triangle {
-    
-    var perimeter: [Coordinate] { adjacent + diagonals + touching }
+    public var perimeter: [Coordinate] { adjacent + diagonals + touching }
     
     //
     //  Directly connected adjacent triangles that share an edge.
@@ -376,17 +288,9 @@ extension Grid.Triangle {
     //              :-------:-------:
     //
  
-    public var adjacent: [Coordinate] { corners }
+    public var adjacent: [Coordinate] { Grid.Axis.allCases.map { adjacent(along: $0) } }
     
-    public func adjacent(along axis: Grid.Axis) -> Coordinate {
-        
-        switch axis {
-            
-        case .x: return corner(corner: .c0)
-        case .y: return corner(corner: .c1)
-        case .z: return corner(corner: .c2)
-        }
-    }
+    public func adjacent(along axis: Grid.Axis) -> Coordinate { position + (axis.coordinate * delta) }
     
     //
     //  Indirectly connected diagonal triangles that are touching a corner.
@@ -406,9 +310,9 @@ extension Grid.Triangle {
         
         switch axis {
             
-        case .x: return .init(-delta + coordinate.x, delta + coordinate.y, delta + coordinate.z)
-        case .y: return .init(delta + coordinate.x, -delta + coordinate.y, delta + coordinate.z)
-        case .z: return .init(delta + coordinate.x, delta + coordinate.y, -delta + coordinate.z)
+        case .x: return .init(-delta + position.x, delta + position.y, delta + position.z)
+        case .y: return .init(delta + position.x, -delta + position.y, delta + position.z)
+        case .z: return .init(delta + position.x, delta + position.y, -delta + position.z)
         }
     }
     
@@ -430,12 +334,12 @@ extension Grid.Triangle {
         
         switch axis {
             
-        case .x: return [.init(coordinate.x, delta + coordinate.y, -delta + coordinate.z),
-                         .init(coordinate.x, -delta + coordinate.y, delta + coordinate.z)]
-        case .y: return [.init(delta + coordinate.x, coordinate.y, -delta + coordinate.z),
-                         .init(-delta + coordinate.x, coordinate.y, delta + coordinate.z)]
-        case .z: return [.init(delta + coordinate.x, -delta + coordinate.y, coordinate.z),
-                         .init(-delta + coordinate.x, delta + coordinate.y, coordinate.z)]
+        case .x: return [.init(-delta + position.x, position.y, delta + position.z),
+                         .init(-delta + position.x, delta + position.y, position.z)]
+        case .y: return [.init(position.x, -delta + position.y, delta + position.z),
+                         .init(delta + position.x, -delta + position.y, position.z)]
+        case .z: return [.init(position.x, delta + position.y, -delta + position.z),
+                         .init(delta + position.x, position.y, -delta + position.z)]
         }
     }
 }
