@@ -9,7 +9,17 @@ import Foundation
 
 extension Array where Element == Coordinate {
     
-    public func rotate(toward axis: Grid.Axis) -> Self { map { $0.rotate(around: axis) } }
+    public func rotate(rotation: Coordinate.Rotation) -> Self { map { $0.rotate(rotation: rotation) } }
+}
+
+extension Array where Element == Grid.Triangle.Kite {
+    
+    public func rotate(times: Int = 1) -> Self {
+        
+        let times = times % 3
+        
+        return indices.map { self[$0 + times] }
+    }
 }
 
 extension Array where Element == Polygon {

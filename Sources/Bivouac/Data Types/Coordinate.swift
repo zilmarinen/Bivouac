@@ -79,13 +79,11 @@ extension Coordinate {
 
 extension Coordinate {
     
-    public func rotate(around axis: Grid.Axis) -> Self {
+    public enum Rotation {
         
-        switch axis {
-            
-        case .x: return self
-        case .y: return Coordinate(z, x, y)
-        case .z: return Coordinate(z, y, x)
-        }
+        case clockwise
+        case counterClockwise
     }
+    
+    public func rotate(rotation: Rotation) -> Self { rotation == .clockwise ? Coordinate(z, x, y) : Coordinate(y, z, x) }
 }
