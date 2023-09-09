@@ -10,6 +10,13 @@ import Foundation
 extension Vector: Identifiable {
     
     public var id: String { "[\(x), \(y), \(z)]" }
+    
+    init(_ coordinate: Coordinate) {
+        
+        self.init(Double(coordinate.x),
+                  Double(coordinate.y),
+                  Double(coordinate.z))
+    }
 }
 
 extension Vector {

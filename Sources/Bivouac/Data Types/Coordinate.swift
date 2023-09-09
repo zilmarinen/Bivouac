@@ -17,9 +17,12 @@ public struct Coordinate: Codable,
     
     public var id: String { "[\(x), \(y), \(z)]" }
     
-    public var equalToZero: Bool { x + y + z == 0 }
-    public var equalToOne: Bool { x + y + z == 1 }
-    public var equalToNegativeOne: Bool { x + y + z == -1 }
+    public var sum: Int { x + y + z }
+    public var sumAbs: Int { abs(x) + abs(y) + abs(z) }
+    
+    public var equalToZero: Bool { sum == 0 }
+    public var equalToOne: Bool { sum == 1 }
+    public var equalToNegativeOne: Bool { sum == -1 }
     
     public init(_ x: Int,
                 _ y: Int,
@@ -39,8 +42,16 @@ extension Coordinate {
     public static let unitY = Coordinate(0, 1, 0)
     public static let unitZ = Coordinate(0, 0, 1)
     
-    public static func -(lhs: Coordinate, rhs: Coordinate) -> Coordinate { Coordinate(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z) }
-    public static func +(lhs: Coordinate, rhs: Coordinate) -> Coordinate { Coordinate(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z) }
+    public static func -(lhs: Coordinate,
+                         rhs: Coordinate) -> Coordinate { Coordinate(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z) }
+    
+    public static func +(lhs: Coordinate,
+                         rhs: Coordinate) -> Coordinate { Coordinate(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z) }
+    
+    public static prefix func -(rhs: Coordinate) -> Coordinate { Coordinate(-rhs.x, -rhs.y, -rhs.z) }
+    
+    public static func *(lhs: Coordinate,
+                         rhs: Int) -> Coordinate { Coordinate(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs) }
 }
 
 extension Coordinate {
