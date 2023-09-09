@@ -7,71 +7,110 @@
 extension Grid {
     
     //
-    //  Footprint defines a grouping of triangles centered around
-    //  a specified coordinate rotated to align with a given axis.
+    //  Footprint defines a grouping of coordinates centered
+    //  around a specified origin.
     //
     
     public struct Footprint {
         
-        public let origin: Coordinate
+        public let origin: Grid.Triangle
         
         public let coordinates: [Coordinate]
         
-        public let rotation: Axis
-        
-        init(origin: Coordinate,
-             coordinates: [Coordinate],
-             rotation: Axis = .x) {
+        public init(origin: Coordinate,
+                    coordinates: [Coordinate]) {
             
-            self.origin = origin
-            self.coordinates = coordinates.rotate(toward: rotation).map { origin + $0 }
-            self.rotation = rotation
+            self.init(origin: Triangle(origin),
+                      coordinates: coordinates)
         }
         
-        init(origin: Coordinate,
-             area: Area,
-             rotation: Axis = .x) {
+        public init(origin: Coordinate,
+                    area: Area) {
             
             self.init(origin: origin,
-                      coordinates: area.footprint,
-                      rotation: rotation)
+                      coordinates: area.footprint)
+        }
+        
+        public init(origin: Triangle,
+                    coordinates: [Coordinate]) {
+            
+            self.origin = origin
+            self.coordinates = coordinates.map { origin.position + (origin.isPointy ? $0 : -$0) }
         }
     }
 }
 
 extension Grid.Footprint {
+ 
+    public func rotate(rotation: Coordinate.Rotation) -> Self {
+        
+        let footprint = coordinates.map {  (origin.isPointy ? $0 - origin.position : -($0 - origin.position)) }
+        
+        return Grid.Footprint(origin: origin.position,
+                              coordinates: footprint.rotate(rotation: rotation))
+    }
     
-    public enum Area {
+    public func intersects(rhs: Grid.Footprint) -> Bool {
+        
+        for coordinate in rhs.coordinates {
+            
+            if intersects(rhs: coordinate) { return true }
+        }
+        
+        return false
+    }
+    
+    public func intersects(rhs: Coordinate) -> Bool { coordinates.contains(rhs) }
+}
+
+extension Grid.Footprint {
+    
+    public enum Area: CaseIterable,
+                      Identifiable {
         
         case triangle
-        case trianglePerimeter
+        case triangleLarge
         case rhombus
         case star
         case hexagon
-        case hexagonPerimeter
+        case hexagonLarge
         case trapezium
+        
+        public var id: String {
+            
+            switch self {
+                
+            case .triangle: return "Triangle"
+            case .triangleLarge: return "Large Triangle"
+            case .rhombus: return "Rhombus"
+            case .star: return "Star"
+            case .hexagon: return "Hexagon"
+            case .hexagonLarge: return "Large Hexagon"
+            case .trapezium: return "Trapezium"
+            }
+        }
         
         public var footprint: [Coordinate] {
             
             let origin = Grid.Triangle(.zero)
-            let xAdjacent = Grid.Triangle(origin.adjacent(along: .x))
-            let xDiagonal = Grid.Triangle(origin.diagonal(along: .x))
+            let adjacent = Grid.Triangle(origin.adjacent(along: .x))
+            let diagonal = Grid.Triangle(origin.diagonal(along: .x))
             
             switch self {
                 
-            case .triangle: return [origin.coordinate]
-            case .trianglePerimeter: return [origin.coordinate] + origin.adjacent
-            case .rhombus: return [origin.coordinate,
-                                   xAdjacent.coordinate]
-            case .star: return origin.adjacent + xAdjacent.adjacent
-            case .hexagon: return [origin.coordinate,
+            case .triangle: return [origin.position]
+            case .triangleLarge: return [origin.position] + origin.adjacent
+            case .rhombus: return [origin.position,
+                                   adjacent.position]
+            case .star: return origin.adjacent + adjacent.adjacent
+            case .hexagon: return [origin.position,
                                    origin.adjacent(along: .y),
                                    origin.adjacent(along: .z),
-                                   xDiagonal.coordinate,
-                                   xDiagonal.adjacent(along: .y),
-                                   xDiagonal.adjacent(along: .z)]
-            case .hexagonPerimeter: return Array(Set(Area.hexagon.footprint.flatMap { Grid.Triangle($0).perimeter }))
-            case .trapezium: return [origin.coordinate] + origin.perimeter
+                                   diagonal.position,
+                                   diagonal.adjacent(along: .y),
+                                   diagonal.adjacent(along: .z)]
+            case .hexagonLarge: return Array(Set(Area.hexagon.footprint.flatMap { Grid.Triangle($0).perimeter }))
+            case .trapezium: return [origin.position] + origin.perimeter
             }
         }
     }
