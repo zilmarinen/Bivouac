@@ -51,11 +51,15 @@ extension Grid.Triangle {
             }
         }
     }
+    
+    public var pattern: Grid.Triangle.Kite.Pattern { Grid.Triangle.Kite.Pattern.allCases[position.sumAbs % Grid.Triangle.Kite.Pattern.allCases.count] }
+    public var kites: [Grid.Triangle.Kite] { pattern.kites.rotate(times: position.sumAbs) }
 }
 
 extension Grid.Triangle.Kite {
     
     public enum Pattern: Int,
+                         CaseIterable,
                          Identifiable {
         
         case descartes

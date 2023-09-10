@@ -26,7 +26,8 @@ extension Grid {
 
 extension Grid.Triangle {
     
-    public enum Vertex: CaseIterable {
+    public enum Vertex: Int,
+                        CaseIterable {
         
         public static var allCases: [Grid.Triangle.Vertex] = [.v2, .v1, .v0]
         
@@ -53,6 +54,8 @@ extension Grid.Triangle {
     }
     
     public func vertices(for scale: Grid.Scale) -> [Vector] { vertices.map { $0.convert(to: scale) } }
+    
+    public func index(of vertex: Grid.Vertex) -> Grid.Triangle.Vertex? { Vertex.allCases.first { self.vertex($0) == vertex.position } }
 }
 
 extension Grid.Triangle {
