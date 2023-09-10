@@ -16,9 +16,9 @@ extension Array where Element == Grid.Triangle.Kite {
     
     public func rotate(times: Int = 1) -> Self {
         
-        let times = times % 3
+        let times = times % count
         
-        return indices.map { self[$0 + times] }
+        return indices.map { self[($0 + times) % count] }
     }
 }
 
