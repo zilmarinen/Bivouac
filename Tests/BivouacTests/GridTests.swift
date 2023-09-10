@@ -35,9 +35,9 @@ final class TriangleTests: XCTestCase {
         let chunkSieve = pointyTriangle.sieve(for: .chunk)
         let regionSieve = pointyTriangle.sieve(for: .region)
         
-        XCTAssertEqual(tileSieve.coordinates.count, 3)
-        XCTAssertEqual(chunkSieve.coordinates.count, 36)
-        XCTAssertEqual(regionSieve.coordinates.count, 435)
+        XCTAssertEqual(tileSieve.vertices.count, 3)
+        XCTAssertEqual(chunkSieve.vertices.count, 36)
+        XCTAssertEqual(regionSieve.vertices.count, 435)
     }
     
     // MARK: Adjacency
@@ -242,5 +242,29 @@ final class TriangleTests: XCTestCase {
         XCTAssertEqual(c0, flatTriangle.position + Coordinate(0, 1, 1))
         XCTAssertEqual(c1, flatTriangle.position + Coordinate(1, 0, 1))
         XCTAssertEqual(c2, flatTriangle.position + Coordinate(1, 1, 0))
+    }
+    
+    func testPointyVertexIndices() throws {
+        
+        let v0 = Grid.Vertex(pointyTriangle.position + Coordinate(1, 0, 0))
+        let v1 = Grid.Vertex(pointyTriangle.position + Coordinate(0, 1, 0))
+        let v2 = Grid.Vertex(pointyTriangle.position + Coordinate(0, 0, 1))
+        
+        XCTAssertEqual(.v0, pointyTriangle.index(of: v0))
+        XCTAssertEqual(.v1, pointyTriangle.index(of: v1))
+        XCTAssertEqual(.v2, pointyTriangle.index(of: v2))
+        XCTAssertEqual(nil, pointyTriangle.index(of: Grid.Vertex(.zero)))
+    }
+    
+    func testFlatVertexIndices() throws {
+        
+        let v0 = Grid.Vertex(flatTriangle.position + Coordinate(0, 1, 1))
+        let v1 = Grid.Vertex(flatTriangle.position + Coordinate(1, 0, 1))
+        let v2 = Grid.Vertex(flatTriangle.position + Coordinate(1, 1, 0))
+        
+        XCTAssertEqual(.v0, flatTriangle.index(of: v0))
+        XCTAssertEqual(.v1, flatTriangle.index(of: v1))
+        XCTAssertEqual(.v2, flatTriangle.index(of: v2))
+        XCTAssertEqual(nil, flatTriangle.index(of: Grid.Vertex(.zero)))
     }
 }
