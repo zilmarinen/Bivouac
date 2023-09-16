@@ -9,8 +9,8 @@ import XCTest
 
 final class TriangleTests: XCTestCase {
     
-    let pointyTriangle = Grid.Triangle(.init(5, -3, -2))
-    let flatTriangle = Grid.Triangle(.init(4, -2, -3))
+    let pointyTriangle = Grid.Triangle(.init(4, -2, -2))
+    let flatTriangle = Grid.Triangle(.init(2, -3, -2))
     
     func testUnitTriangleIsPointy() throws {
         
