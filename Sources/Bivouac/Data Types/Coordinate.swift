@@ -67,8 +67,6 @@ extension Coordinate {
     public func convert(to scale: Grid.Scale) -> Vector {
         
         let edgeLength = Double(scale.rawValue)
-        let sqrt3d3 = .sqrt3 / 3.0
-        let sqrt3d6 = .sqrt3 / 6.0
         
         let dx = Double(y)
         let dy = Double(x)
@@ -76,7 +74,7 @@ extension Coordinate {
             
         return Vector((0.5 * dx + -0.5 * dz) * edgeLength,
                       0,
-                      ((-sqrt3d6 * dx) + (sqrt3d3 * dy) - (sqrt3d6 * dz)) * edgeLength)
+                      ((-.sqrt3d6 * dx) + (.sqrt3d3 * dy) - (.sqrt3d6 * dz)) * edgeLength)
     }
 }
 

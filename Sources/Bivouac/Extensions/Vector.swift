@@ -30,7 +30,7 @@ extension Vector {
         
         let edgeLength = Double(scale.rawValue)
         let halfEdgeLength = edgeLength / 2.0
-        let slope = ((.sqrt3 / 3.0) * z)
+        let slope = (.sqrt3d3 * z)
         
         let i = (x - halfEdgeLength) - slope
         let j = (2.0 * slope) + halfEdgeLength

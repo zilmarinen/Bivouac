@@ -203,8 +203,8 @@ extension CoordinateTests {
         
         let edgeLength = Double(scale.rawValue)
         let halfEdgeLength = edgeLength / 2.0
-        let sqrt3d6 = (.sqrt3 / 6) * edgeLength
-        let sqrt3d3 = (.sqrt3 / 3) * edgeLength
+        let sqrt3d6 = .sqrt3d6 * edgeLength
+        let sqrt3d3 = .sqrt3d3 * edgeLength
         
         let v0 = Vector(0.0, 0.0, sqrt3d6 * 2.0)
         let v1 = Vector(halfEdgeLength, 0.0, -sqrt3d6)
