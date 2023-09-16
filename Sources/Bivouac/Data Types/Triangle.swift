@@ -29,8 +29,6 @@ extension Grid.Triangle {
     public enum Vertex: Int,
                         CaseIterable {
         
-        public static var allCases: [Grid.Triangle.Vertex] = [.v2, .v1, .v0]
-        
         case v0, v1, v2
         
         internal var axis: Grid.Axis {

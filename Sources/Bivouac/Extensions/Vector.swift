@@ -29,14 +29,15 @@ extension Vector {
     public func convert(to scale: Grid.Scale) -> Coordinate {
         
         let edgeLength = Double(scale.rawValue)
-        let xv = x + (0.5 * edgeLength)
-        let yv = z + ((-.sqrt3 / 6.0) * edgeLength)
-        let zv = x - (0.5 * edgeLength)
+        let halfEdgeLength = edgeLength / 2.0
+        let slope = ((.sqrt3 / 3.0) * z)
         
-        let cx = Int(floor(( 1 * xv - .sqrt3 / 3.0 * yv) / edgeLength))
-        let cy = Int(ceil((     .sqrt3 * 2.0 / 3.0 * yv) / edgeLength))
-        let cz = Int(floor((-1 * zv - .sqrt3 / 3.0 * yv) / edgeLength))
+        let i = (x - halfEdgeLength) - slope
+        let j = (2.0 * slope) + halfEdgeLength
+        let k = -(x + halfEdgeLength) - slope
         
-        return Coordinate(cx, cy, cz)
+        return Coordinate(Int(floor(j / edgeLength)),
+                          Int(ceil(i / edgeLength)),
+                          Int(ceil(k / edgeLength)))
     }
 }
