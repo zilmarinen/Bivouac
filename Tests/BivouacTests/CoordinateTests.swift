@@ -72,9 +72,9 @@ final class CoordinateTests: XCTestCase {
         XCTAssertEqual(Coordinate.zero, Coordinate(-1, 2, -1).convert(from: .chunk, to: .region))
         XCTAssertEqual(Coordinate.zero, Coordinate(-1, -1, 2).convert(from: .chunk, to: .region))
         
-        XCTAssertEqual(Coordinate.zero, Coordinate(-2, -2, 4).convert(from: .chunk, to: .region))
-        XCTAssertEqual(Coordinate.zero, Coordinate(-2, 4, -2).convert(from: .chunk, to: .region))
-        XCTAssertEqual(Coordinate.zero, Coordinate(4, -2, -2).convert(from: .chunk, to: .region))
+        XCTAssertEqual(Coordinate(-1, -1, 1), Coordinate(-2, -2, 3).convert(from: .chunk, to: .region))
+        XCTAssertEqual(Coordinate(-1, 1, -1), Coordinate(-2, 3, -2).convert(from: .chunk, to: .region))
+        XCTAssertEqual(Coordinate(1, -1, -1), Coordinate(3, -2, -2).convert(from: .chunk, to: .region))
     }
     
     func testCoordinateChunkToTile() throws {
@@ -243,30 +243,26 @@ extension CoordinateTests {
     
     private func testCoordinateToVector(at scale: Grid.Scale) -> Bool {
         
-        let edgeLength = Double(scale.rawValue)
+        let triangles = [zero,
+                         x,
+                         y,
+                         z]
         
-        let c0 = Coordinate(-2, -2, 4)
-        let c1 = Coordinate(-2, 4, -2)
-        let c2 = Coordinate(4, -2, -2)
+        let delta = 0.9
         
-        let c3 = Coordinate(-3, -3, 6)
-        let c4 = Coordinate(-3, 6, -3)
-        let c5 = Coordinate(6, -3, -3)
-        
-        let v0 = Vector(-edgeLength * 3.0, 0.0, -.sqrt3 * edgeLength)
-        let v1 = Vector(edgeLength * 3.0, 0.0, -.sqrt3 * edgeLength)
-        let v2 = Vector(0.0, 0.0, .sqrt3 * edgeLength * 2.0)
-        let v3 = Vector(-edgeLength * 4.5, 0.0, -.sqrt3 * edgeLength * 1.5)
-        let v4 = Vector(edgeLength * 4.5, 0.0, -.sqrt3 * edgeLength * 1.5)
-        let v5 = Vector(0.0, 0.0, .sqrt3 * edgeLength * 3.0)
-        
-        guard c0.convert(to: scale).isEqual(to: v0),
-              c1.convert(to: scale).isEqual(to: v1),
-              c2.convert(to: scale).isEqual(to: v2),
-        
-              c3.convert(to: scale).isEqual(to: v3),
-              c4.convert(to: scale).isEqual(to: v4),
-              c5.convert(to: scale).isEqual(to: v5) else { return false }
+        for triangle in triangles {
+            
+            let position = triangle.position.convert(to: scale)
+            
+            for v in Grid.Triangle.Vertex.allCases {
+                
+                let vertex = triangle.vertex(v).convert(to: scale)
+                
+                let vector = position.lerp(vertex, delta)
+                
+                if vector.convert(to: scale) != triangle.position { return false }
+            }
+        }
         
         return true
     }
