@@ -15,11 +15,14 @@ extension Grid.Triangle {
         case delta
         case epsilon
         case gamma
+        case kappa
         case lambda
         case omega
         case phi
         case psi
         case sigma
+        
+        public static var uniform = Kite.kappa
         
         public var id: String {
             
@@ -28,6 +31,7 @@ extension Grid.Triangle {
             case .delta: return "Delta"
             case .epsilon: return "Epsilon"
             case .gamma: return "Gamma"
+            case .kappa: return "Kappa"
             case .lambda: return "Lambda"
             case .omega: return "Omega"
             case .phi: return "Phi"
@@ -43,6 +47,7 @@ extension Grid.Triangle {
             case .delta: return [.v0, .v5, .v7]
             case .epsilon: return [.v0, .v5, .center, .v7]
             case .gamma: return [.v0, .v5, .v6, .v9, .v10, .v7]
+            case .kappa: return [.v0, .v1, .v2]
             case .lambda: return [.v0, .v5, .v9, .v10, .v6, .v7]
             case .omega: return [.v0, .v5, .v9, .v10, .v7]
             case .phi: return [.v0, .v5, .v6, .v10, .v7]

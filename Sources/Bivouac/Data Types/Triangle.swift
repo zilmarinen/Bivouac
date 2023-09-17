@@ -11,9 +11,16 @@ extension Grid {
     
     public struct Triangle: Equatable {
         
+        enum Constant {
+            
+            public static let inverseRotation = 180.0
+        }
+        
         public var isPointy: Bool { position.equalToZero }
         
         public var delta: Int { isPointy ? -1 : 1 }
+        
+        public var rotation: Double { isPointy ? 0.0 : Constant.inverseRotation }
         
         public let position: Coordinate
         
@@ -38,6 +45,16 @@ extension Grid.Triangle {
             case .v0: return .x
             case .v1: return .y
             case .v2: return .z
+            }
+        }
+        
+        public var vertices: [Vertex] {
+            
+            switch self {
+                
+            case .v0: return [.v1, .v2]
+            case .v1: return [.v2, .v0]
+            case .v2: return [.v0, .v1]
             }
         }
     }
