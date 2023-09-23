@@ -10,14 +10,12 @@ extension Polygon {
     
     public struct Face {
         
-        private let vectors: [Vector]
+        internal let vertices: [Vertex]
         
-        public init(vectors: [Vector]) {
-         
-            self.vectors = vectors
-        }
+        public var polygon: Polygon? { Polygon(vertices) }
         
-        public func polygon(color: Color) -> Polygon? {
+        public init?(_ vectors: [Vector],
+                     color: Color) {
             
             guard vectors.count > 2 else { return nil }
             
@@ -30,12 +28,30 @@ extension Polygon {
                         
             let normal = ab.cross(bc).normalized()
             
-            let vertices = vectors.map { Vertex($0,
-                                                normal,
-                                                nil,
-                                                color) }
+            self.vertices = vectors.map { Vertex($0,
+                                                 normal,
+                                                 nil,
+                                                 color) }
+        }
+        
+        public init?(_ vectors: [Vector],
+                     colors: [Color]) {
             
-            return Polygon(vertices)
+            guard vectors.count > 2 else { return nil }
+            
+            let v0 = vectors[0]
+            let v1 = vectors[1]
+            let v2 = vectors[2]
+            
+            let ab = v2 - v1
+            let bc = v0 - v1
+                        
+            let normal = ab.cross(bc).normalized()
+            
+            self.vertices = vectors.indices.map { Vertex(vectors[$0],
+                                                         normal,
+                                                         nil,
+                                                         colors[$0]) }
         }
     }
 }
