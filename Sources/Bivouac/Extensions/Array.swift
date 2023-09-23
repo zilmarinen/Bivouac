@@ -36,3 +36,15 @@ extension Array where Element == Polygon {
         append(polygon)
     }
 }
+
+extension Array where Element == Vector {
+    
+    public var average: Vector {
+        
+        var vector = Vector.zero
+        
+        forEach { vector += $0 }
+        
+        return vector / Double(count)
+    }
+}
