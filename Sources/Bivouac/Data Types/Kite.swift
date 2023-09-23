@@ -24,6 +24,9 @@ extension Grid.Triangle {
         
         public static var uniform = Kite.kappa
         
+        public static let apex = Double(Grid.Scale.tile.rawValue) / 10.0
+        public static let base = Double(Grid.Scale.tile.rawValue) / 2.0
+        
         public var id: String {
             
             switch self {
@@ -57,7 +60,7 @@ extension Grid.Triangle {
         }
     }
     
-    public var pattern: Grid.Triangle.Kite.Pattern { Grid.Triangle.Kite.Pattern.allCases[position.sumAbs % Grid.Triangle.Kite.Pattern.allCases.count] }
+    public var pattern: Grid.Triangle.Kite.Pattern { Grid.Triangle.Kite.Pattern.allCases[abs(position.index) % Grid.Triangle.Kite.Pattern.allCases.count] }
     public var kites: [Grid.Triangle.Kite] { pattern.kites.rotate(times: position.sumAbs) }
 }
 

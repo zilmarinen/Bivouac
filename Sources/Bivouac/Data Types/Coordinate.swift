@@ -19,6 +19,7 @@ public struct Coordinate: Codable,
     
     public var sum: Int { x + y + z }
     public var sumAbs: Int { abs(x) + abs(y) + abs(z) }
+    public var index: Int { sumAbs * x + y * z }
     
     public var equalToZero: Bool { sum == 0 }
     public var equalToOne: Bool { sum == 1 }

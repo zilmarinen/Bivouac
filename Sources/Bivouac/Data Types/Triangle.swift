@@ -9,18 +9,17 @@ import Foundation
 
 extension Grid {
     
-    public struct Triangle: Equatable {
+    public struct Triangle: Equatable,
+                            Hashable {
         
-        enum Constant {
-            
-            public static let inverseRotation = 180.0
-        }
+        public static let inverseRotation = 180.0
+        public static let stepRotation = 120.0
         
         public var isPointy: Bool { position.equalToZero }
         
         public var delta: Int { isPointy ? -1 : 1 }
         
-        public var rotation: Double { isPointy ? 0.0 : Constant.inverseRotation }
+        public var rotation: Double { isPointy ? 0.0 : Self.inverseRotation }
         
         public let position: Coordinate
         
