@@ -30,7 +30,7 @@ extension Scene {
     
     public func clear() {
         
-        rootNode.childNodes.forEach { $0.removeFromParentNode() }
+        rootNode.removeAllChildren()
         rootNode.addChildNode(camera)
     }
 }
