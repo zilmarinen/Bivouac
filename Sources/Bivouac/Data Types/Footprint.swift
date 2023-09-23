@@ -4,6 +4,8 @@
 //  Created by Zack Brown on 26/08/2023.
 //
 
+import Euclid
+
 extension Grid {
     
     //
@@ -68,49 +70,174 @@ extension Grid.Footprint {
     public enum Area: CaseIterable,
                       Identifiable {
         
-        case triangle
-        case triangleLarge
-        case rhombus
-        case star
-        case hexagon
-        case hexagonLarge
-        case trapezium
+        case escher
+        case floret
+        case penrose
+        case pinwheel
+        case snub
+        case truchet
+        case voronoi
+        case wang
+        
+        public func center(at scale: Grid.Scale) -> Vector { footprint.map { $0.convert(to: scale) }.average }
         
         public var id: String {
             
             switch self {
                 
-            case .triangle: return "Triangle"
-            case .triangleLarge: return "Large Triangle"
-            case .rhombus: return "Rhombus"
-            case .star: return "Star"
-            case .hexagon: return "Hexagon"
-            case .hexagonLarge: return "Large Hexagon"
-            case .trapezium: return "Trapezium"
+            case .escher: return "Escher"
+            case .floret: return "Floret"
+            case .penrose: return "Penrose"
+            case .pinwheel: return "Pinwheel"
+            case .snub: return "Snub"
+            case .truchet: return "Truchet"
+            case .voronoi: return "Voronoi"
+            case .wang: return "Wang"
             }
         }
         
         public var footprint: [Coordinate] {
             
-            let origin = Grid.Triangle(.zero)
-            let adjacent = Grid.Triangle(origin.adjacent(along: .x))
-            let diagonal = Grid.Triangle(origin.diagonal(along: .x))
+            switch self {
+                
+            case .escher: return perimeter + [Coordinate(-1, 0, 0)]
+            case .penrose: return perimeter + [Coordinate(1, 0, -1),
+                                               Coordinate(1, 0, -2),
+                                               Coordinate(2, 0, -2),
+                                               Coordinate(2, -1, -2),
+                                               Coordinate(2, -1, -1),
+                                               Coordinate(1, -1, -1)]
+            case .pinwheel: return perimeter + [Coordinate(1, 0, -1)]
+            case .snub: return perimeter + [Coordinate(1, -1, -1),
+                                            Coordinate(2, -1, -1)]
+            case .voronoi: return perimeter + [Coordinate(1, -1, 0),
+                                               Coordinate(1, -1, -1),
+                                               Coordinate(2, -1, -1),
+                                               Coordinate(2, -1, -2),
+                                               Coordinate(3, -1, -2),
+                                               Coordinate(3, -2, -2),
+                                               Coordinate(3, -2, -1),
+                                               Coordinate(2, -2, -1),
+                                               Coordinate(2, -2, 0),
+                                               Coordinate(1, -2, 0)]
+            default: return perimeter
+            }
+        }
+        
+        public var perimeter: [Coordinate] {
             
             switch self {
                 
-            case .triangle: return [origin.position]
-            case .triangleLarge: return [origin.position] + origin.adjacent
-            case .rhombus: return [origin.position,
-                                   adjacent.position]
-            case .star: return origin.adjacent + adjacent.adjacent
-            case .hexagon: return [origin.position,
-                                   origin.adjacent(along: .y),
-                                   origin.adjacent(along: .z),
-                                   diagonal.position,
-                                   diagonal.adjacent(along: .y),
-                                   diagonal.adjacent(along: .z)]
-            case .hexagonLarge: return Array(Set(Area.hexagon.footprint.flatMap { Grid.Triangle($0).perimeter }))
-            case .trapezium: return [origin.position] + origin.perimeter
+            case .escher: return [Coordinate(-1, 1, 0),
+                                  Coordinate(-1, 0, 1),
+                                  Coordinate(0, 0, 0)]
+                
+            case .floret: return [Coordinate(0, -1, 0),
+                                  Coordinate(1, -1, 0),
+                                  Coordinate(1, -1, -1),
+                                  Coordinate(1, 0, -1),
+                                  Coordinate(0, 0, -1),
+                                  Coordinate(0, 0, 0)]
+                
+            case .penrose: return [Coordinate(0, -1, 0),
+                                   Coordinate(1, -1, 0),
+                                   Coordinate(1, -2, 0),
+                                   Coordinate(2, -2, 0),
+                                   Coordinate(2, -2, -1),
+                                   Coordinate(3, -2, -1),
+                                   Coordinate(3, -2, -2),
+                                   Coordinate(3, -1, -2),
+                                   Coordinate(3, -1, -3),
+                                   Coordinate(3, 0, -3),
+                                   Coordinate(2, 0, -3),
+                                   Coordinate(2, 1, -3),
+                                   Coordinate(1, 1, -3),
+                                   Coordinate(1, 1, -2),
+                                   Coordinate(0, 1, -2),
+                                   Coordinate(0, 1, -1),
+                                   Coordinate(0, 0, -1),
+                                   Coordinate(0, 0, 0)]
+                
+            case .pinwheel: return [Coordinate(0, -1, 0),
+                                    Coordinate(1, -1, 0),
+                                    Coordinate(1, -1, -1),
+                                    Coordinate(2, -1, -1),
+                                    Coordinate(2, -1, -2),
+                                    Coordinate(2, 0, -2),
+                                    Coordinate(1, 0, -2),
+                                    Coordinate(1, 1, -2),
+                                    Coordinate(0, 1, -2),
+                                    Coordinate(0, 1, -1),
+                                    Coordinate(0, 0, -1),
+                                    Coordinate(0, 0, 0)]
+                
+            case .snub: return [Coordinate(0, -1, 0),
+                                Coordinate(1, -1, 0),
+                                Coordinate(1, -2, 0),
+                                Coordinate(2, -2, 0),
+                                Coordinate(2, -2, -1),
+                                Coordinate(3, -2, -1),
+                                Coordinate(3, -2, -2),
+                                Coordinate(3, -1, -2),
+                                Coordinate(2, -1, -2),
+                                Coordinate(2, 0, -2),
+                                Coordinate(1, 0, -2),
+                                Coordinate(1, 0, -1),
+                                Coordinate(0, 0, -1),
+                                Coordinate(0, 0, 0)]
+                
+            case .truchet: return [Coordinate(0, -1, 0),
+                                   Coordinate(1, -1, 0),
+                                   Coordinate(1, -1, -1),
+                                   Coordinate(2, -1, -1),
+                                   Coordinate(2, -1, -2),
+                                   Coordinate(2, 0, -2),
+                                   Coordinate(1, 0, -2),
+                                   Coordinate(1, 0, -1),
+                                   Coordinate(0, 0, -1),
+                                   Coordinate(0, 0, 0)]
+                
+            case .voronoi: return [Coordinate(0, -1, 0),
+                                   Coordinate(0, -1, 1),
+                                   Coordinate(0, -2, 1),
+                                   Coordinate(1, -2, 1),
+                                   Coordinate(1, -3, 1),
+                                   Coordinate(2, -3, 1),
+                                   Coordinate(2, -3, 0),
+                                   Coordinate(3, -3, 0),
+                                   Coordinate(3, -3, -1),
+                                   Coordinate(4, -3, -1),
+                                   Coordinate(4, -3, -2),
+                                   Coordinate(4, -2, -2),
+                                   Coordinate(4, -2, -3),
+                                   Coordinate(4, -1, -3),
+                                   Coordinate(3, -1, -3),
+                                   Coordinate(3, 0, -3),
+                                   Coordinate(2, 0, -3),
+                                   Coordinate(2, 0, -2),
+                                   Coordinate(1, 0, -2),
+                                   Coordinate(1, 0, -1),
+                                   Coordinate(0, 0, -1),
+                                   Coordinate(0, 0, 0)]
+                
+            case .wang: return [Coordinate(0, -1, 0),
+                                Coordinate(1, -1, 0),
+                                Coordinate(1, -2, 0),
+                                Coordinate(1, -2, 1),
+                                Coordinate(1, -3, 1),
+                                Coordinate(2, -3, 1),
+                                Coordinate(2, -3, 0),
+                                Coordinate(2, -2, 0),
+                                Coordinate(2, -2, -1),
+                                Coordinate(3, -2, -1),
+                                Coordinate(3, -2, -2),
+                                Coordinate(3, -1, -2),
+                                Coordinate(2, -1, -2),
+                                Coordinate(2, -1, -1),
+                                Coordinate(1, -1, -1),
+                                Coordinate(1, 0, -1),
+                                Coordinate(0, 0, -1),
+                                Coordinate(0, 0, 0)]
             }
         }
     }
