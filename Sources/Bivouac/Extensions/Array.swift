@@ -10,6 +10,24 @@ import Foundation
 extension Array where Element == Coordinate {
     
     public func rotate(rotation: Coordinate.Rotation) -> Self { map { $0.rotate(rotation: rotation) } }
+    
+    public var perimeter: [Coordinate] {
+        
+        var coordinates = Set<Coordinate>()
+        
+        forEach { coordinates.formUnion(Grid.Triangle($0).perimeter) }
+        
+        return Array(coordinates.subtracting(self))
+    }
+    
+    public var vertices: [Grid.Vertex] {
+        
+        var vertices = Set<Grid.Vertex>()
+        
+        forEach { vertices.formUnion(Grid.Triangle($0).vertices.map { Grid.Vertex($0) }) }
+        
+        return Array<Grid.Vertex>(vertices)
+    }
 }
 
 extension Array where Element == Grid.Triangle.Kite {
@@ -34,6 +52,27 @@ extension Array where Element == Polygon {
         guard let polygon else { throw MeshError.invalidPolygon }
         
         append(polygon)
+    }
+}
+
+extension Array where Element == Grid.Triangle {
+    
+    public var perimeter: [Grid.Triangle] {
+        
+        var triangles = Set<Grid.Triangle>()
+        
+        forEach { triangles.formUnion($0.perimeter.map { Grid.Triangle($0) }) }
+        
+        return Array(triangles.subtracting(self))
+    }
+    
+    public var vertices: [Grid.Vertex] {
+        
+        var vertices = Set<Grid.Vertex>()
+        
+        forEach { vertices.formUnion($0.vertices.map { Grid.Vertex($0) }) }
+        
+        return Array<Grid.Vertex>(vertices)
     }
 }
 
