@@ -32,6 +32,11 @@ extension Grid {
 
 extension Grid.Triangle {
     
+    public static let zero = Grid.Triangle(.zero)
+}
+
+extension Grid.Triangle {
+    
     public enum Vertex: Int,
                         CaseIterable {
         

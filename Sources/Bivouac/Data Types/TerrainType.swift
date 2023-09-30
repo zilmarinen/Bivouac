@@ -46,8 +46,3 @@ public enum TerrainType: Int,
         }
     }
 }
-
-extension TerrainType {
-    
-    public func isValidTransition(rhs: TerrainType) -> Bool { self == rhs || transitions.contains(rhs) }
-}

@@ -19,7 +19,7 @@ final class FootprintTests: XCTestCase {
     
     func testPointyFootprintTranslation() throws {
         
-        let footprint = Grid.Footprint(origin: Coordinate(1, -2, 1),
+        let footprint = Grid.Footprint(origin: .init(Coordinate(1, -2, 1)),
                                        coordinates: coordinates)
         
         let translatedCoordinates = [Coordinate(1, -2, 1),
@@ -35,7 +35,7 @@ final class FootprintTests: XCTestCase {
     
     func testFlatFootprintTranslation() throws {
         
-        let footprint = Grid.Footprint(origin: Coordinate(2, -1, -2),
+        let footprint = Grid.Footprint(origin: .init(Coordinate(2, -1, -2)),
                                        coordinates: coordinates)
         
         let translatedCoordinates = [Coordinate(2, -1, -2),
@@ -82,7 +82,7 @@ final class FootprintTests: XCTestCase {
     
     func testPointyFootprintTranslationAndRotation() throws {
         
-        let footprint = Grid.Footprint(origin: Coordinate(1, -2, 1),
+        let footprint = Grid.Footprint(origin: .init(Coordinate(1, -2, 1)),
                                        coordinates: coordinates)
         
         let rotatedFootprint = footprint.rotate(rotation: .counterClockwise)
@@ -100,7 +100,7 @@ final class FootprintTests: XCTestCase {
     
     func testFlatFootprintTranslationAndRotation() throws {
         
-        let footprint = Grid.Footprint(origin: Coordinate(2, -1, -2),
+        let footprint = Grid.Footprint(origin: .init(Coordinate(2, -1, -2)),
                                        coordinates: coordinates)
         
         let rotatedFootprint = footprint.rotate(rotation: .counterClockwise)
@@ -121,10 +121,10 @@ final class FootprintTests: XCTestCase {
         let footprint = Grid.Footprint(origin: .zero,
                                        coordinates: coordinates)
         
-        let lhs = Grid.Footprint(origin: Coordinate(2, -2, 0),
+        let lhs = Grid.Footprint(origin: .init(Coordinate(2, -2, 0)),
                                  coordinates: coordinates).rotate(rotation: .clockwise)
         
-        let rhs = Grid.Footprint(origin: Coordinate(2, -2, 0),
+        let rhs = Grid.Footprint(origin: .init(Coordinate(2, -2, 0)),
                                  coordinates: coordinates)
         
         XCTAssertFalse(footprint.intersects(rhs: lhs))

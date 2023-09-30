@@ -6,7 +6,8 @@
 
 extension Grid {
     
-    public struct Vertex: Equatable {
+    public struct Vertex: Equatable,
+                          Hashable {
         
         public let position: Coordinate
         
