@@ -20,9 +20,10 @@ public final class Camera: SCNNode {
         
         let camera = SCNCamera()
         
-        camera.usesOrthographicProjection = false
+        camera.usesOrthographicProjection = true
+        camera.orthographicScale = 5.0
         
-        node.position = SCNVector3(0, 1, 5)
+        node.position = SCNVector3(0.0, 3.5, 10.0)
         node.camera = camera
         
         return node
@@ -31,6 +32,8 @@ public final class Camera: SCNNode {
     required override public init() {
         
         super.init()
+        
+        pov.look(at: SCNVector3(0.0, 0.0, 0.0))
         
         addChildNode(pov)
     }

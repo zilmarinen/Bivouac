@@ -11,6 +11,8 @@ open class Scene: SCNScene,
     
     public let camera = Camera()
     
+    internal let surface = Surface()
+    
     internal var lastUpdate: TimeInterval?
     
     required override public init() {
@@ -18,6 +20,7 @@ open class Scene: SCNScene,
         super.init()
         
         rootNode.addChildNode(camera)
+        rootNode.addChildNode(surface)
     }
     
     public required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -32,6 +35,7 @@ extension Scene {
         
         rootNode.removeAllChildren()
         rootNode.addChildNode(camera)
+        rootNode.addChildNode(surface)
     }
 }
 

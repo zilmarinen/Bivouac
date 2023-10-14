@@ -10,7 +10,8 @@ extension Polygon {
     
     public struct Face {
         
-        internal let vertices: [Vertex]
+        public let vertices: [Vertex]
+        public let normal: Vector
         
         public var polygon: Polygon? { Polygon(vertices) }
         
@@ -32,6 +33,7 @@ extension Polygon {
                                                  normal,
                                                  nil,
                                                  color) }
+            self.normal = normal
         }
         
         public init?(_ vectors: [Vector],
@@ -52,6 +54,7 @@ extension Polygon {
                                                          normal,
                                                          nil,
                                                          colors[$0]) }
+            self.normal = normal
         }
     }
 }
