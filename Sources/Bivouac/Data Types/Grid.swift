@@ -21,9 +21,31 @@ extension Grid {
 
 extension Grid {
     
-    public enum Axis: CaseIterable {
+    public enum Axis: Int,
+                      CaseIterable,
+                      Identifiable {
         
         case x, y, z
+        
+        public var id: String {
+            
+            switch self {
+                
+            case .x: return "X"
+            case .y: return "Y"
+            case .z: return "Z"
+            }
+        }
+        
+        public var color: Color {
+            
+            switch self {
+                
+            case .x: return .red
+            case .y: return .green
+            case .z: return .blue
+            }
+        }
         
         internal var coordinate: Coordinate {
             

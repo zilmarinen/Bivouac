@@ -43,7 +43,7 @@ extension Grid.Triangle {
             }
         }
         
-        public func vertices(for scale: Grid.Scale) -> [Stencil.Vertex] {
+        public var vertices: [Stencil.Vertex] {
             
             switch self {
                 

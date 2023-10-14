@@ -18,7 +18,8 @@ let package = Package(
     targets: [
         .target(
             name: "Bivouac",
-            dependencies: ["Euclid"]),
+            dependencies: ["Euclid"],
+            resources: [.process("Shaders/")]),
         .testTarget(
             name: "BivouacTests",
             dependencies: ["Bivouac"]),
