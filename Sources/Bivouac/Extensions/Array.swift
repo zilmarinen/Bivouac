@@ -24,7 +24,7 @@ extension Array where Element == Coordinate {
         
         var coordinates = Set<Coordinate>()
         
-        forEach { coordinates.formUnion(Grid.Triangle($0).vertices) }
+        forEach { coordinates.formUnion(Grid.Triangle($0).corners) }
         
         return Array<Coordinate>(coordinates)
     }
@@ -65,7 +65,7 @@ extension Array where Element == Grid.Triangle {
         
         var vertices = Set<Coordinate>()
         
-        forEach { vertices.formUnion($0.vertices) }
+        forEach { vertices.formUnion($0.corners) }
         
         return Array<Coordinate>(vertices)
     }

@@ -224,9 +224,9 @@ final class TriangleTests: XCTestCase {
     
     func testPointyVertices() throws {
         
-        let c0 = pointyTriangle.vertex(.v0)
-        let c1 = pointyTriangle.vertex(.v1)
-        let c2 = pointyTriangle.vertex(.v2)
+        let c0 = pointyTriangle.corner(.c0)
+        let c1 = pointyTriangle.corner(.c1)
+        let c2 = pointyTriangle.corner(.c2)
         
         XCTAssertEqual(c0, pointyTriangle.position + Coordinate(1, 0, 0))
         XCTAssertEqual(c1, pointyTriangle.position + Coordinate(0, 1, 0))
@@ -235,9 +235,9 @@ final class TriangleTests: XCTestCase {
     
     func testFlatVertices() throws {
         
-        let c0 = flatTriangle.vertex(.v0)
-        let c1 = flatTriangle.vertex(.v1)
-        let c2 = flatTriangle.vertex(.v2)
+        let c0 = flatTriangle.corner(.c0)
+        let c1 = flatTriangle.corner(.c1)
+        let c2 = flatTriangle.corner(.c2)
         
         XCTAssertEqual(c0, flatTriangle.position + Coordinate(0, 1, 1))
         XCTAssertEqual(c1, flatTriangle.position + Coordinate(1, 0, 1))
@@ -250,9 +250,9 @@ final class TriangleTests: XCTestCase {
         let v1 = pointyTriangle.position + Coordinate(0, 1, 0)
         let v2 = pointyTriangle.position + Coordinate(0, 0, 1)
         
-        XCTAssertEqual(.v0, pointyTriangle.index(of: v0))
-        XCTAssertEqual(.v1, pointyTriangle.index(of: v1))
-        XCTAssertEqual(.v2, pointyTriangle.index(of: v2))
+        XCTAssertEqual(.c0, pointyTriangle.index(of: v0))
+        XCTAssertEqual(.c1, pointyTriangle.index(of: v1))
+        XCTAssertEqual(.c2, pointyTriangle.index(of: v2))
         XCTAssertEqual(nil, pointyTriangle.index(of: .zero))
     }
     
@@ -262,9 +262,9 @@ final class TriangleTests: XCTestCase {
         let v1 = flatTriangle.position + Coordinate(1, 0, 1)
         let v2 = flatTriangle.position + Coordinate(1, 1, 0)
         
-        XCTAssertEqual(.v0, flatTriangle.index(of: v0))
-        XCTAssertEqual(.v1, flatTriangle.index(of: v1))
-        XCTAssertEqual(.v2, flatTriangle.index(of: v2))
+        XCTAssertEqual(.c0, flatTriangle.index(of: v0))
+        XCTAssertEqual(.c1, flatTriangle.index(of: v1))
+        XCTAssertEqual(.c2, flatTriangle.index(of: v2))
         XCTAssertEqual(nil, flatTriangle.index(of: .zero))
     }
 }

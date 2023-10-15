@@ -37,44 +37,44 @@ extension Grid.Triangle {
 
 extension Grid.Triangle {
     
-    public enum Vertex: Int,
+    public enum Corner: Int,
                         CaseIterable {
         
-        case v0, v1, v2
+        case c0, c1, c2
         
         internal var axis: Grid.Axis {
             
             switch self {
                 
-            case .v0: return .x
-            case .v1: return .y
-            case .v2: return .z
+            case .c0: return .x
+            case .c1: return .y
+            case .c2: return .z
             }
         }
         
-        public var vertices: [Vertex] {
+        public var connected: [Corner] {
             
             switch self {
                 
-            case .v0: return [.v1, .v2]
-            case .v1: return [.v2, .v0]
-            case .v2: return [.v0, .v1]
+            case .c0: return [.c1, .c2]
+            case .c1: return [.c2, .c0]
+            case .c2: return [.c0, .c1]
             }
         }
     }
     
-    public var vertices: [Coordinate] { Vertex.allCases.map { vertex($0) } }
+    public var corners: [Coordinate] { Corner.allCases.map { corner($0) } }
         
-    public func vertex(_ vertex: Vertex) -> Coordinate {
+    public func corner(_ corner: Corner) -> Coordinate {
         
-        let unit = (vertex.axis.coordinate * -1) + (isPointy ? .zero : .one)
+        let unit = (corner.axis.coordinate * -1) + (isPointy ? .zero : .one)
         
         return position + (isPointy ? -unit : unit)
     }
     
-    public func vertices(for scale: Grid.Scale) -> [Vector] { vertices.map { $0.convert(to: scale) } }
+    public func corners(for scale: Grid.Scale) -> [Vector] { corners.map { $0.convert(to: scale) } }
     
-    public func index(of vertex: Coordinate) -> Grid.Triangle.Vertex? { Vertex.allCases.first { self.vertex($0) == vertex } }
+    public func index(of vertex: Coordinate) -> Grid.Triangle.Corner? { Corner.allCases.first { self.corner($0) == vertex } }
 }
 
 extension Grid.Triangle {
@@ -147,9 +147,9 @@ extension Grid.Triangle {
     
     public func stencil(for scale: Grid.Scale) -> Stencil {
         
-        let v0 = vertex(.v0).convert(to: scale)
-        let v1 = vertex(.v1).convert(to: scale)
-        let v2 = vertex(.v2).convert(to: scale)
+        let v0 = corner(.c0).convert(to: scale)
+        let v1 = corner(.c1).convert(to: scale)
+        let v2 = corner(.c2).convert(to: scale)
         
         let v5 = v0.lerp(v1, 0.5)
         let v7 = v0.lerp(v2, 0.5)

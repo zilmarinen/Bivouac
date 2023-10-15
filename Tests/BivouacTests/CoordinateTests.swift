@@ -250,24 +250,24 @@ extension CoordinateTests {
         let pz = Vector(halfEdgeLength, 0.0, sqrt3d6)
         
         guard zero.position.convert(to: scale).isEqual(to: .zero),
-              zero.vertex(.v0).convert(to: scale).isEqual(to: v0),
-              zero.vertex(.v1).convert(to: scale).isEqual(to: v1),
-              zero.vertex(.v2).convert(to: scale).isEqual(to: v2),
+              zero.corner(.c0).convert(to: scale).isEqual(to: v0),
+              zero.corner(.c1).convert(to: scale).isEqual(to: v1),
+              zero.corner(.c2).convert(to: scale).isEqual(to: v2),
               
               x.position.convert(to: scale).isEqual(to: px),
-              x.vertex(.v0).convert(to: scale).isEqual(to: v3),
-              x.vertex(.v1).convert(to: scale).isEqual(to: v2),
-              x.vertex(.v2).convert(to: scale).isEqual(to: v1),
+              x.corner(.c0).convert(to: scale).isEqual(to: v3),
+              x.corner(.c1).convert(to: scale).isEqual(to: v2),
+              x.corner(.c2).convert(to: scale).isEqual(to: v1),
         
               y.position.convert(to: scale).isEqual(to: py),
-              y.vertex(.v0).convert(to: scale).isEqual(to: v2),
-              y.vertex(.v1).convert(to: scale).isEqual(to: v4),
-              y.vertex(.v2).convert(to: scale).isEqual(to: v0),
+              y.corner(.c0).convert(to: scale).isEqual(to: v2),
+              y.corner(.c1).convert(to: scale).isEqual(to: v4),
+              y.corner(.c2).convert(to: scale).isEqual(to: v0),
         
               z.position.convert(to: scale).isEqual(to: pz),
-              z.vertex(.v0).convert(to: scale).isEqual(to: v1),
-              z.vertex(.v1).convert(to: scale).isEqual(to: v0),
-              z.vertex(.v2).convert(to: scale).isEqual(to: v5) else { return false }
+              z.corner(.c0).convert(to: scale).isEqual(to: v1),
+              z.corner(.c1).convert(to: scale).isEqual(to: v0),
+              z.corner(.c2).convert(to: scale).isEqual(to: v5) else { return false }
         
         return true
     }
@@ -285,9 +285,9 @@ extension CoordinateTests {
             
             let position = triangle.position.convert(to: scale)
             
-            for v in Grid.Triangle.Vertex.allCases {
+            for corner in Grid.Triangle.Corner.allCases {
                 
-                let vertex = triangle.vertex(v).convert(to: scale)
+                let vertex = triangle.corner(corner).convert(to: scale)
                 
                 let vector = position.lerp(vertex, delta)
                 
