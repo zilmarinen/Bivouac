@@ -74,7 +74,7 @@ extension Grid.Triangle {
     
     public func vertices(for scale: Grid.Scale) -> [Vector] { vertices.map { $0.convert(to: scale) } }
     
-    public func index(of vertex: Grid.Vertex) -> Grid.Triangle.Vertex? { Vertex.allCases.first { self.vertex($0) == vertex.position } }
+    public func index(of vertex: Coordinate) -> Grid.Triangle.Vertex? { Vertex.allCases.first { self.vertex($0) == vertex } }
 }
 
 extension Grid.Triangle {
@@ -255,7 +255,7 @@ extension Grid.Triangle {
             
         public let coordinate: Coordinate
         public let scale: Grid.Scale
-        public let vertices: [Grid.Vertex]
+        public let vertices: [Coordinate]
     }
     
     public func sieve(for scale: Grid.Scale) -> Sieve {
@@ -267,7 +267,7 @@ extension Grid.Triangle {
                                       to: .tile)
         let pointy = position.equalToZero
         
-        var vertices: [Grid.Vertex] = []
+        var vertices: [Coordinate] = []
 
         for column in 0..<columns {
 
@@ -284,7 +284,7 @@ extension Grid.Triangle {
                                         pointy ? t : -t - 1,
                                         pointy ? s : -s - 1)
 
-                vertices.append(.init(origin + offset))
+                vertices.append(origin + offset)
             }
         }
         

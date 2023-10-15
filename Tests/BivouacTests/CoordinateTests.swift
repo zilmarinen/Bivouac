@@ -199,6 +199,37 @@ final class CoordinateTests: XCTestCase {
 
 extension CoordinateTests {
     
+    func testAdjacent() throws {
+        
+        let vertex = Coordinate(-2, -2, 5)
+        
+        let vertices = [Coordinate(-1, -2, 4),
+                        Coordinate(-1, -3, 5),
+                        Coordinate(-2, -3, 6),
+                        Coordinate(-3, -2, 6),
+                        Coordinate(-3, -1, 5),
+                        Coordinate(-2, -1, 4)]
+        
+        XCTAssertEqual(vertex.adjacent, vertices)
+    }
+    
+    func testTriangles() throws {
+        
+        let vertex = Coordinate(-2, 5, -2)
+        
+        let triangles = [Grid.Triangle(.init(-2, 4, -3)),
+                         Grid.Triangle(.init(-2, 4, -2)),
+                         Grid.Triangle(.init(-3, 4, -2)),
+                         Grid.Triangle(.init(-3, 5, -2)),
+                         Grid.Triangle(.init(-3, 5, -3)),
+                         Grid.Triangle(.init(-2, 5, -3))]
+        
+        XCTAssertEqual(vertex.triangles, triangles)
+    }
+}
+
+extension CoordinateTests {
+    
     private func testVertices(at scale: Grid.Scale) -> Bool {
         
         let edgeLength = Double(scale.rawValue)

@@ -89,3 +89,40 @@ extension Coordinate {
     
     public func rotate(rotation: Rotation) -> Self { rotation == .clockwise ? Coordinate(z, x, y) : Coordinate(y, z, x) }
 }
+
+extension Coordinate {
+    
+    //
+    //  Directly connected adjacent vertices that share an edge.
+    //
+    //                  x-------x
+    //                /   \   /   \
+    //              x-------x-------x
+    //                \   /   \   /
+    //                  x-------x
+    //
+    
+    public var adjacent: [Coordinate] { [self + (.unitX + -.unitZ),
+                                         self + (.unitX + -.unitY),
+                                         self + (-.unitY + .unitZ),
+                                         self + (-.unitX + .unitZ),
+                                         self + (-.unitX + .unitY),
+                                         self + (.unitY + -.unitZ)] }
+    
+    //
+    //  Directly connected adjacent triangles that share an vertex.
+    //
+    //                  ---------
+    //                / x \ x / x \
+    //               ------- -------
+    //                \ x / x \ x /
+    //                  ---------
+    //
+    
+    public var triangles: [Grid.Triangle] { [.init(self + -(.unitY + .unitZ)),
+                                             .init(self + -.unitY),
+                                             .init(self + -(.unitX + .unitY)),
+                                             .init(self + -.unitX),
+                                             .init(self + -(.unitX + .unitZ)),
+                                             .init(self + -.unitZ)] }
+}

@@ -20,13 +20,13 @@ extension Array where Element == Coordinate {
         return Array(coordinates.subtracting(self))
     }
     
-    public var vertices: [Grid.Vertex] {
+    public var vertices: [Coordinate] {
         
-        var vertices = Set<Grid.Vertex>()
+        var coordinates = Set<Coordinate>()
         
-        forEach { vertices.formUnion(Grid.Triangle($0).vertices.map { Grid.Vertex($0) }) }
+        forEach { coordinates.formUnion(Grid.Triangle($0).vertices) }
         
-        return Array<Grid.Vertex>(vertices)
+        return Array<Coordinate>(coordinates)
     }
 }
 
@@ -41,11 +41,6 @@ extension Array where Element == Grid.Triangle.Kite {
 }
 
 extension Array where Element == Polygon {
-    
-    public enum MeshError: Error {
-        
-        case invalidPolygon
-    }
     
     @inlinable public mutating func glue(_ polygon: Polygon?) throws {
         
@@ -66,13 +61,13 @@ extension Array where Element == Grid.Triangle {
         return Array(triangles.subtracting(self))
     }
     
-    public var vertices: [Grid.Vertex] {
+    public var vertices: [Coordinate] {
         
-        var vertices = Set<Grid.Vertex>()
+        var vertices = Set<Coordinate>()
         
-        forEach { vertices.formUnion($0.vertices.map { Grid.Vertex($0) }) }
+        forEach { vertices.formUnion($0.vertices) }
         
-        return Array<Grid.Vertex>(vertices)
+        return Array<Coordinate>(vertices)
     }
 }
 

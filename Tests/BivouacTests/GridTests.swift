@@ -244,27 +244,27 @@ final class TriangleTests: XCTestCase {
         XCTAssertEqual(c2, flatTriangle.position + Coordinate(1, 1, 0))
     }
     
-    func testPointyVertexIndices() throws {
+    func testPointyAnchorIndices() throws {
         
-        let v0 = Grid.Vertex(pointyTriangle.position + Coordinate(1, 0, 0))
-        let v1 = Grid.Vertex(pointyTriangle.position + Coordinate(0, 1, 0))
-        let v2 = Grid.Vertex(pointyTriangle.position + Coordinate(0, 0, 1))
+        let v0 = pointyTriangle.position + Coordinate(1, 0, 0)
+        let v1 = pointyTriangle.position + Coordinate(0, 1, 0)
+        let v2 = pointyTriangle.position + Coordinate(0, 0, 1)
         
         XCTAssertEqual(.v0, pointyTriangle.index(of: v0))
         XCTAssertEqual(.v1, pointyTriangle.index(of: v1))
         XCTAssertEqual(.v2, pointyTriangle.index(of: v2))
-        XCTAssertEqual(nil, pointyTriangle.index(of: Grid.Vertex(.zero)))
+        XCTAssertEqual(nil, pointyTriangle.index(of: .zero))
     }
     
     func testFlatVertexIndices() throws {
         
-        let v0 = Grid.Vertex(flatTriangle.position + Coordinate(0, 1, 1))
-        let v1 = Grid.Vertex(flatTriangle.position + Coordinate(1, 0, 1))
-        let v2 = Grid.Vertex(flatTriangle.position + Coordinate(1, 1, 0))
+        let v0 = flatTriangle.position + Coordinate(0, 1, 1)
+        let v1 = flatTriangle.position + Coordinate(1, 0, 1)
+        let v2 = flatTriangle.position + Coordinate(1, 1, 0)
         
         XCTAssertEqual(.v0, flatTriangle.index(of: v0))
         XCTAssertEqual(.v1, flatTriangle.index(of: v1))
         XCTAssertEqual(.v2, flatTriangle.index(of: v2))
-        XCTAssertEqual(nil, flatTriangle.index(of: Grid.Vertex(.zero)))
+        XCTAssertEqual(nil, flatTriangle.index(of: .zero))
     }
 }
