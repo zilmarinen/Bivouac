@@ -13,4 +13,6 @@ public extension Double {
     static let sqrt3d6 = 0.2886751346
     
     static let silver = 2.41421
+    
+    static let pi2 = .pi * 2.0
 }
