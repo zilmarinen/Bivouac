@@ -4,6 +4,7 @@
 //  Created by Zack Brown on 06/09/2023.
 //
 
+import GameController
 import SceneKit
 
 open class Scene: SCNScene,
@@ -12,6 +13,8 @@ open class Scene: SCNScene,
     public let camera = Camera()
     
     internal let surface = Surface()
+    
+    internal lazy var inputManager = InputManager(delegate: self)
     
     internal var lastUpdate: TimeInterval?
     
@@ -26,12 +29,13 @@ open class Scene: SCNScene,
     public required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
     open func update(delta: TimeInterval,
-                     time: TimeInterval) {}
-}
-
-extension Scene {
+                     time: TimeInterval) {
+        
+        inputManager.update(delta: delta,
+                            time: time)
+    }
     
-    public func clear() {
+    open func clear() {
         
         rootNode.removeAllChildren()
         rootNode.addChildNode(camera)
@@ -52,3 +56,43 @@ extension Scene: SCNSceneRendererDelegate {
         lastUpdate = time
     }
 }
+
+extension Scene: InputManagerDelegate {
+ 
+    func inputManager(inputManager: InputManager,
+                      didConnectController: GCController) {
+        
+        print("inputManager:didConnectController")
+    }
+    
+    func inputManager(inputManager: InputManager,
+                      didDisconnectController: GCController) {
+        
+        self.isPaused = true
+    }
+    
+    func inputManager(inputManager: InputManager,
+                      didConnectKeyboard: GCKeyboard) {
+        
+        print("inputManager:didConnectKeyboard")
+    }
+    
+    func inputManager(inputManager: InputManager,
+                      didDisconnectKeyboard: GCKeyboard) {
+        
+        self.isPaused = true
+    }
+    
+    func inputManager(inputManager: InputManager,
+                      didConnectMouse: GCMouse) {
+        
+        print("inputManager:didConnectMouse")
+    }
+    
+    func inputManager(inputManager: InputManager,
+                      didDisconnectMouse: GCMouse) {
+        
+        self.isPaused = true
+    }
+}
+

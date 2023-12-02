@@ -9,21 +9,16 @@ import SceneKit
 
 public final class Camera: SCNNode {
     
-    internal enum Constant {
-        
-        static let radius = 1.0
-    }
-    
     public let pov: SCNNode = {
         
         let node = SCNNode()
         
         let camera = SCNCamera()
         
-        camera.usesOrthographicProjection = true
-        camera.orthographicScale = 5.0
+        camera.usesOrthographicProjection = false
+        camera.orthographicScale = 0.7
         
-        node.position = SCNVector3(0.0, 3.5, 10.0)
+        node.position = SCNVector3(Vector.up * 3.5 + -Vector.forward * 3.5)
         node.camera = camera
         
         return node

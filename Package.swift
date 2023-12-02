@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "Bivouac",
-    platforms: [.macOS(.v11),
+    platforms: [.macOS(.v12),
                 .iOS(.v13)],
     products: [
         .library(
@@ -13,12 +13,15 @@ let package = Package(
             targets: ["Bivouac"]),
     ],
     dependencies: [
-        .package(url: "git@github.com:nicklockwood/Euclid.git", branch: "main")
+        .package(url: "git@github.com:nicklockwood/Euclid.git", branch: "main"),
+        .package(url: "git@github.com:pointfreeco/swift-dependencies.git", branch: "main")
     ],
     targets: [
         .target(
             name: "Bivouac",
-            dependencies: ["Euclid"],
+            dependencies: ["Euclid",
+                           .product(name: "Dependencies",
+                                    package: "swift-dependencies")],
             resources: [.process("Shaders/")]),
         .testTarget(
             name: "BivouacTests",
