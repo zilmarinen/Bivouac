@@ -54,4 +54,10 @@ extension Vector {
                           Int(floor(i / edgeLength)),
                           Int(ceil(k / edgeLength) - 1))
     }
+    
+    public func move(toward a: Vector,
+                     _ t: Double) -> Vector {
+        
+        return self + ((a - self).normalized() * t)
+    }
 }

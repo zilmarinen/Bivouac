@@ -16,3 +16,10 @@ public extension Double {
     
     static let pi2 = .pi * 2.0
 }
+
+extension Double {
+    
+    public static func normalize(_ value: Double,
+                                 min: Double,
+                                 max: Double) -> Double { return (value - min) / (max - min) }
+}
