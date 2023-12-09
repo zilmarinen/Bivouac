@@ -14,16 +14,31 @@ using namespace metal;
 #define __Bivouac__
 
 namespace Bivouac {
+
+    constant float3 goochCool = float3(0.356f, 0.819f, 0.843f);
+    constant float3 goochWarm = float3(1.f, 0.18f, 0.298f);
+
+    constant float bufferSize = 1024.f;
     
     struct SceneBuffer {
         
         float4x4 viewTransform;
-        
         float4x4 projectionTransform;
-        float4x4 inverseProjectionTransform;
+        float4x4 viewProjectionTransform;
+        float4x4 lastFrameViewProjectionTransform;
         
         float4x4 inverseViewTransform;
+        float4x4 inverseProjectionTransform;
         float4x4 inverseViewProjectionTransform;
+        float4x4 inverseTransposeViewTransform;
+        
+        float4 ambientLightingColor;
+        float2 inverseResolution;
+        
+        float time;
+        float sinTime;
+        float cosTime;
+        float random01;
         
         //
         //  x: Near
@@ -55,17 +70,12 @@ namespace Bivouac {
         
         float3 position [[ attribute(SCNVertexSemanticPosition) ]];
         float3 normal [[ attribute(SCNVertexSemanticNormal) ]];
-        float4 tangent [[ attribute(SCNVertexSemanticTangent) ]];
         float4 color [[ attribute(SCNVertexSemanticColor) ]];
     };
 
-    struct TexturedVertex {
-        
+    struct SimpleVertex {
+    
         float3 position [[ attribute(SCNVertexSemanticPosition) ]];
-        float3 normal [[ attribute(SCNVertexSemanticNormal) ]];
-        float4 tangent [[ attribute(SCNVertexSemanticTangent) ]];
-        float4 color [[ attribute(SCNVertexSemanticColor) ]];
-        float2 uv [[ attribute(SCNVertexSemanticTexcoord0) ]];
     };
     
     struct Fragment {
@@ -74,8 +84,6 @@ namespace Bivouac {
         
         float3 position;
         float3 normal;
-        float3 tangent;
-        float3 bitangent;
         float2 uv;
         float4 color;
         float3 diffuse;
@@ -87,10 +95,15 @@ namespace Bivouac {
         float3 view;
     };
     
-    struct Buffer {
+    struct CombinedBuffer {
         
-        float4 color  [[ color(0) ]];
+        float4 color [[ color(0) ]];
         float depth [[ depth(any) ]];
+    };
+
+    struct NormalBuffer {
+    
+        float4 normal [[ color(1) ]];
     };
     
     struct Light {
@@ -104,7 +117,6 @@ namespace Bivouac {
         
         float4 position;
         float3 normal;
-        float4 tangent;
         float2 uv;
         float4 color;
     };
@@ -121,8 +133,6 @@ namespace Bivouac {
         //
         float3 position;
         float3 normal;
-        float3 tangent;
-        float3 bitangent;
         
         float4 diffuse;
         float4 specular;
@@ -144,6 +154,21 @@ namespace Bivouac {
     inline half dotClamped(float3 lhs,
                            float3 rhs) { return saturate(dot(lhs,
                                                              rhs)); }
+
+    inline float3 gooch(Fragment f) {
+        
+        float3 normal = normalize(f.normal);
+        float3 lightDirection = normalize(float3(1.f, 1.f, 0.f));
+        float3 reflectionDirection = reflect(-lightDirection, normal);
+        float3 specular = dotClamped(f.view, reflectionDirection);
+        float diffuse = (1.f + dot(lightDirection,
+                                   normal)) / 2.f;
+
+        float3 cool = goochCool * f.color.rgb;
+        float3 warm = goochWarm * f.color.rgb;
+
+        return (diffuse * warm) + ((1.f - diffuse) * cool);
+    }
 }
 
 #endif

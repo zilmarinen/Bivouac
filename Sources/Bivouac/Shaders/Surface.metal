@@ -54,9 +54,11 @@ vertex SurfaceFragment surface_vertex(SurfaceVertex v [[ stage_in ]],
                                       constant SceneBuffer& scn_frame [[ buffer(0) ]],
                                       constant NodeBuffer& scn_node [[ buffer(1) ]]) {
     float2 uv =  v.position.xy;
-    
+
     return {    .fragmentPosition = float4(v.position,
                                            1.f),
+                .position = scn_node.modelViewProjectionTransform * float4(v.position,
+                                   1.f),
                 .near = unproject(float3(uv,
                                          0.f),
                                   scn_frame),
@@ -69,11 +71,14 @@ vertex SurfaceFragment surface_vertex(SurfaceVertex v [[ stage_in ]],
 fragment float4 surface_fragment(SurfaceFragment f [[stage_in]],
                                  constant SceneBuffer& scn_frame [[ buffer(0) ]],
                                  constant NodeBuffer& scn_node [[ buffer(1) ]]) {
-    
+    return backgroundColor;
     float clip = -f.near.y / (f.far.y - f.near.y);
     
     float3 position = f.near + clip * (f.far - f.near);
-    //return float4(backgroundColor.xyz, 1.f * float(clip > 0.f));
+    
+    float gr = grid(f.position.xy, 1.f, 0.1f);
+    
+    return float4(backgroundColor.xyz * gr, 1.f * float(clip > 0.f));
     
 //    float4 color = gridn(position.xz,
 //                         10.f,
@@ -83,9 +88,9 @@ fragment float4 surface_fragment(SurfaceFragment f [[stage_in]],
 //    float4 color = grid(position.xz,
 //                        10.f);
     //float gr = triangleGrid(position.xz, 1.f, 0.1f);
-    //float gr = grid(position.xz, 1.f, 0.1f);
+    //float gr = grid(f.fragmentPosition.xz, 1.f, 0.1f);
     //return backgroundColor * gr;
     //return backgroundColor * color;
     //return float4(color.rgb, 1.f * float(clip > 0.f));
-    return backgroundColor;
+    //return backgroundColor;
 }

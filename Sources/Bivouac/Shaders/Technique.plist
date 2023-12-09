@@ -4,7 +4,7 @@
 <dict>
 	<key>passes</key>
 	<dict>
-		<key>pass_draw</key>
+		<key>scene</key>
 		<dict>
 			<key>colorStates</key>
 			<dict>
@@ -26,9 +26,97 @@
 			<dict>
 				<key>color</key>
 				<string>color_buffer</string>
+				<key>depth</key>
+				<string>depth_buffer</string>
 			</dict>
 		</dict>
-		<key>pass_edge_detection</key>
+		<key>normals</key>
+		<dict>
+			<key>colorStates</key>
+			<dict>
+				<key>clearColor</key>
+				<string>0.35 0.95 0.45 1.0</string>
+				<key>clear</key>
+				<true/>
+			</dict>
+			<key>depthStates</key>
+			<dict>
+				<key>clear</key>
+				<true/>
+			</dict>
+			<key>draw</key>
+			<string>DRAW_SCENE</string>
+			<key>metalVertexShader</key>
+			<string>technique_vertex</string>
+			<key>metalFragmentShader</key>
+			<string>technique_normal_fragment</string>
+			<key>inputs</key>
+			<dict/>
+			<key>outputs</key>
+			<dict>
+				<key>color</key>
+				<string>normal_buffer</string>
+			</dict>
+		</dict>
+		<key>gaussian_vertical</key>
+		<dict>
+			<key>colorStates</key>
+			<dict>
+				<key>clear</key>
+				<false/>
+			</dict>
+			<key>depthStates</key>
+			<dict>
+				<key>clear</key>
+				<false/>
+			</dict>
+			<key>draw</key>
+			<string>DRAW_QUAD</string>
+			<key>metalVertexShader</key>
+			<string>gaussian_vertex</string>
+			<key>metalFragmentShader</key>
+			<string>gaussian_vertical_fragment</string>
+			<key>inputs</key>
+			<dict>
+				<key>colorBuffer</key>
+				<string>color_buffer</string>
+			</dict>
+			<key>outputs</key>
+			<dict>
+				<key>color</key>
+				<string>color_buffer</string>
+			</dict>
+		</dict>
+		<key>gaussian_horizontal</key>
+		<dict>
+			<key>colorStates</key>
+			<dict>
+				<key>clear</key>
+				<false/>
+			</dict>
+			<key>depthStates</key>
+			<dict>
+				<key>clear</key>
+				<false/>
+			</dict>
+			<key>draw</key>
+			<string>DRAW_QUAD</string>
+			<key>metalVertexShader</key>
+			<string>gaussian_vertex</string>
+			<key>metalFragmentShader</key>
+			<string>gaussian_horizontal_fragment</string>
+			<key>inputs</key>
+			<dict>
+				<key>colorBuffer</key>
+				<string>color_buffer</string>
+			</dict>
+			<key>outputs</key>
+			<dict>
+				<key>color</key>
+				<string>color_buffer</string>
+			</dict>
+		</dict>
+		<key>sobel</key>
 		<dict>
 			<key>colorStates</key>
 			<dict>
@@ -45,13 +133,17 @@
 			<key>draw</key>
 			<string>DRAW_QUAD</string>
 			<key>metalVertexShader</key>
-			<string>edge_detection_vertex</string>
+			<string>sobel_vertex</string>
 			<key>metalFragmentShader</key>
-			<string>edge_detection_fragment</string>
+			<string>sobel_fragment</string>
 			<key>inputs</key>
 			<dict>
 				<key>colorBuffer</key>
 				<string>color_buffer</string>
+				<key>depthBuffer</key>
+				<string>depth_buffer</string>
+				<key>normalBuffer</key>
+				<string>normal_buffer</string>
 			</dict>
 			<key>outputs</key>
 			<dict>
@@ -62,8 +154,9 @@
 	</dict>
 	<key>sequence</key>
 	<array>
-		<string>pass_draw</string>
-		<string>pass_edge_detection</string>
+		<string>scene</string>
+		<string>normals</string>
+		<string>sobel</string>
 	</array>
 	<key>symbols</key>
 	<dict/>
@@ -73,6 +166,29 @@
 		<dict>
 			<key>type</key>
 			<string>color</string>
+			<key>size</key>
+			<string>1024x1024</string>
+		</dict>
+		<key>normal_buffer</key>
+		<dict>
+			<key>type</key>
+			<string>color</string>
+			<key>size</key>
+			<string>1024x1024</string>
+		</dict>
+		<key>depth_buffer</key>
+		<dict>
+			<key>type</key>
+			<string>depth</string>
+			<key>size</key>
+			<string>1024x1024</string>
+		</dict>
+		<key>stencil_buffer</key>
+		<dict>
+			<key>type</key>
+			<string>depth</string>
+			<key>size</key>
+			<string>1024x1024</string>
 		</dict>
 	</dict>
 </dict>
