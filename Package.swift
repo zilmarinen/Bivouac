@@ -9,12 +9,12 @@ let package = Package(
                 .iOS(.v17)],
     products: [
         .library(name: "Bivouac",
-                 targets: ["Bivouac"]),
+                 targets: ["Bivouac"])
     ],
     dependencies: [
         .package(path: "../Deltille"),
         .package(url: "git@github.com:nicklockwood/Euclid.git",
-                 branch: "main"),
+                 branch: "main")
     ],
     targets: [
         .target(name: "Bivouac",
