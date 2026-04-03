@@ -8,6 +8,8 @@
 import Euclid
 import RealityKit
 
+// MARK: Mesh Descriptor
+
 extension Mesh {
     
     internal struct Descriptor {
@@ -60,5 +62,19 @@ extension Mesh {
         
         return .init(vertices: vertices,
                      indices: indices)
+    }
+}
+
+// MARK: Surface
+
+public extension Mesh {
+    
+    static func surface(_ vectors: [Vector],
+                        _ color: Color) -> Self? {
+        
+        guard let surface = Polygon.surface(vectors,
+                                            color) else { return nil }
+        
+        return Mesh([surface])
     }
 }
