@@ -18,13 +18,6 @@ extension Triangle {
         
         return patterns[abs(vertex.position.identifier) % patterns.count]
     }
-    
-    public func kite(index: Int) -> Triangle.Kite {
-        
-        let kites = pattern.kites
-        
-        return kites[abs((vertex.position.identifier % kites.count) + index) % kites.count]
-    }
 }
 
 // MARK: Septomino
