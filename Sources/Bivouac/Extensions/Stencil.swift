@@ -9,13 +9,11 @@ import Deltille
 
 extension Triangle.Stencil.Vertex: @retroactive Rotatable {
     
-    public static let turns: Int = Triangle.turns
-    
-    public func rotate(_ rotation: Rotation) -> Self {
+    public func rotate(_ rotation: Triangle.Rotation) -> Self {
         
         var rotated = self
         
-        for _ in 0..<Self.wrap(rotation.turns) {
+        for _ in 0..<rotation.turns {
             
             rotated = switch rotated {
                 
@@ -44,7 +42,7 @@ extension Triangle.Stencil.Vertex: @retroactive Rotatable {
 
 extension Array where Element == Triangle.Stencil.Vertex {
     
-    public func rotate(_ rotation: Rotation) -> Self {
+    public func rotate(_ rotation: Triangle.Rotation) -> Self {
      
         map {
             
