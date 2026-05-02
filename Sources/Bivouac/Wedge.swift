@@ -7,7 +7,10 @@
 
 import Deltille
 
-public enum Wedge: Codable {
+public enum Wedge: Codable,
+                   Hashable,
+                   Identifiable,
+                   Sendable{
     
     case corner(triangle: Triangle,
                 corner: Triangle.Corner)
@@ -15,6 +18,16 @@ public enum Wedge: Codable {
               edge: Triangle.Edge)
     case tile(triangle: Triangle,
               corners: [Triangle.Corner])
+    
+    public var id: String {
+        
+        switch self {
+            
+        case .corner: "corner"
+        case .edge: "edge"
+        case .tile: "tile"
+        }
+    }
     
     public init(_ triangle: Triangle,
                 _ vertices: [Triangle.Vertex]) {
@@ -42,6 +55,34 @@ public enum Wedge: Codable {
             
             self = .tile(triangle: triangle,
                          corners: triangle.corners)
+        }
+    }
+}
+
+extension Wedge {
+    
+    public var orientation: Double {
+        
+        switch self {
+            
+        case .corner(let triangle,
+                     let corner):
+            
+            let rotation = Triangle.Rotation(turns: -corner.rawValue)
+            
+            return triangle.orientation + rotation.radians
+            
+        case .edge(let triangle,
+                   let edge):
+            
+            let rotation = Triangle.Rotation(turns: -edge.rawValue)
+            
+            return triangle.orientation + rotation.radians
+            
+        case .tile(let triangle,
+                   _):
+            
+            return triangle.orientation
         }
     }
 }
