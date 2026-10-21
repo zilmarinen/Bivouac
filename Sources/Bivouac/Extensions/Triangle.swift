@@ -16,7 +16,7 @@ extension Triangle {
         
         let patterns = Kite.Pattern.allCases
         
-        return patterns[abs(vertex.position.identifier) % patterns.count]
+        return patterns[abs(identifier) % patterns.count]
     }
 }
 
@@ -28,6 +28,6 @@ extension Triangle {
         
         let septominos = Triangle.Septomino.allCases
         
-        return septominos[abs(vertex.position.identifier) % septominos.count]
+        return septominos[abs(identifier) % septominos.count]
     }
 }

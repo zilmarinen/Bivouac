@@ -5,6 +5,7 @@
 //  Created by Zack Brown on 18/11/2025.
 //
 
+import Collections
 import Deltille
 
 public enum Wedge: Codable,
@@ -17,15 +18,15 @@ public enum Wedge: Codable,
     case edge(triangle: Triangle,
               edge: Triangle.Edge)
     case tile(triangle: Triangle,
-              corners: [Triangle.Corner])
+              corners: OrderedSet<Triangle.Corner>)
     
     public var id: String {
         
         switch self {
             
-        case .corner: "corner"
-        case .edge: "edge"
-        case .tile: "tile"
+        case .corner: "Corner"
+        case .edge: "Edge"
+        case .tile: "Tile"
         }
     }
     
@@ -68,14 +69,14 @@ extension Wedge {
         case .corner(let triangle,
                      let corner):
             
-            let rotation = Triangle.Rotation(turns: -corner.rawValue)
+            let rotation = Triangle.Rotation(-corner.rawValue)
             
             return triangle.orientation + rotation.radians
             
         case .edge(let triangle,
                    let edge):
             
-            let rotation = Triangle.Rotation(turns: -edge.rawValue)
+            let rotation = Triangle.Rotation(-edge.rawValue)
             
             return triangle.orientation + rotation.radians
             

@@ -10,7 +10,7 @@ import Euclid
 
 extension Triangle {
     
-    public enum Kite: String,
+    public enum Kite: Int,
                       CaseIterable,
                       Identifiable,
                       Sendable {
@@ -29,7 +29,23 @@ extension Triangle {
         case psi
         case sigma
         
-        public var id: String { rawValue.capitalized }
+        public var id: String {
+        
+            switch self {
+                
+            case .delta: "Delta"
+            case .epsilon: "Epsilon"
+            case .gamma: "Gamma"
+            case .iota: "Iota"
+            case .kappa: "Kappa"
+            case .lambda: "Lambda"
+            case .omega: "Omega"
+            case .omicron: "Omicron"
+            case .phi: "Phi"
+            case .psi: "Psi"
+            case .sigma: "Sigma"
+            }
+        }
         
         public var divisions: [Stencil.Division] {
             
@@ -71,7 +87,7 @@ extension Triangle {
 
 extension Triangle.Kite {
     
-    public enum Pattern: String,
+    public enum Pattern: Int,
                          CaseIterable,
                          Identifiable,
                          Sendable {
@@ -86,7 +102,21 @@ extension Triangle.Kite {
         case pascal
         case thales
         
-        public var id: String { rawValue.capitalized }
+        public var id: String {
+        
+            switch self {
+                
+            case .descartes: "Descartes"
+            case .euclid: "Euclid"
+            case .euler: "Euler"
+            case .gauss: "Gauss"
+            case .lovelace: "Lovelace"
+            case .mobius: "Mobius"
+            case .nightingale: "Nightingale"
+            case .pascal: "Pascal"
+            case .thales: "Thales"
+            }
+        }
         
         public var kites: [Triangle.Kite] {
                     

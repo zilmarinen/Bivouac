@@ -6,20 +6,23 @@ import PackageDescription
 let package = Package(
     name: "Bivouac",
     platforms: [.macOS(.v15),
-                .iOS(.v17)],
+                .iOS(.v18)],
     products: [
         .library(name: "Bivouac",
                  targets: ["Bivouac"])
     ],
     dependencies: [
-        .package(url: "git@github.com:zilmarinen/Deltille.git",
+        .package(path: "../Deltille"),
+        .package(url: "https://github.com/apple/swift-collections.git",
                  branch: "main"),
-        .package(url: "git@github.com:nicklockwood/Euclid.git",
+        .package(url: "https://github.com/nicklockwood/Euclid.git",
                  branch: "main")
     ],
     targets: [
         .target(name: "Bivouac",
-                dependencies: ["Deltille",
+                dependencies: [.product(name: "Collections",
+                                        package: "swift-collections"),
+                               "Deltille",
                                "Euclid"])
     ]
 )

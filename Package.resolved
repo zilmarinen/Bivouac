@@ -1,22 +1,22 @@
 {
-  "originHash" : "0356454364dfb158416ae2c5ebb65489e23c36f3d0d4063f60517188031658d7",
+  "originHash" : "b80f187d0c4f5ca0ecd8487f35c353ad936e7f769969607f688fb00872db3373",
   "pins" : [
-    {
-      "identity" : "deltille",
-      "kind" : "remoteSourceControl",
-      "location" : "git@github.com:zilmarinen/Deltille.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "1e2dfe7b1517ede73c8109c6a40815a2ea436322"
-      }
-    },
     {
       "identity" : "euclid",
       "kind" : "remoteSourceControl",
-      "location" : "git@github.com:nicklockwood/Euclid.git",
+      "location" : "https://github.com/nicklockwood/Euclid.git",
       "state" : {
         "branch" : "main",
         "revision" : "1aeb8a7c36c22d31c74d4bd2c7e4529e3d43c097"
+      }
+    },
+    {
+      "identity" : "swift-collections",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-collections.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "774d6ba63114dd8302f2b509237748f54943ff2a"
       }
     }
   ],

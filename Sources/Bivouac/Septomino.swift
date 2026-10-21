@@ -9,7 +9,7 @@ import Deltille
 
 extension Triangle {
     
-    public enum Septomino: String,
+    public enum Septomino: Int,
                            CaseIterable,
                            Codable,
                            Identifiable,
@@ -40,9 +40,38 @@ extension Triangle {
         case vela
         case volans
         
-        public var id: String { rawValue.capitalized }
+        public var id: String {
         
-        public var coordinates: [Coordinate] {
+            switch self {
+                
+            case .antlia: "Antlia"
+            case .auriga: "Auriga"
+            case .bootes: "Bootes"
+            case .cepheus: "Cepheus"
+            case .cygnus: "Cygnus"
+            case .delphinus: "Delphinus"
+            case .eridanus: "Eridanus"
+            case .fornax: "Fornax"
+            case .grus: "Grus"
+            case .horologium: "Horologium"
+            case .indus: "Indus"
+            case .lacerta: "Lacerta"
+            case .lyra: "Lyra"
+            case .musca: "Musca"
+            case .norma: "Norma"
+            case .ophiuchus: "Ophiuchus"
+            case .pictor: "Pictor"
+            case .pyxis: "Pyxis"
+            case .reticulum: "Reticulum"
+            case .scorpius: "Scorpius"
+            case .serpens: "Serpens"
+            case .triangulum: "Triangulum"
+            case .vela: "Vela"
+            case .volans: "Volans"
+            }
+        }
+        
+        public var coordinates: [Triangle] {
             
             switch self {
                 
